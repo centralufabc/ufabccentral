@@ -8,7 +8,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "@shoutem/ui": "^0.23.12",
     "moment": "^2.24.0",
     "react": "16.6.3",
     "react-native": "0.58.4",
@@ -19,13 +18,17 @@
   },
   "devDependencies": {
     "babel-core": "7.0.0-bridge.0",
-    "babel-eslint": "^10.0.1",
+    "babel-eslint": "^8.2.6",
     "babel-jest": "24.1.0",
-    "eslint": "^5.14.0",
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-jsx-a11y": "^6.2.1",
-    "eslint-plugin-react": "^7.12.4",
+    "eslint": "^3.11.1",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-config-airbnb-base": "^10.0.1",
+    "eslint-config-quintoandar-pwa": "^2.0.0",
+    "eslint-import-resolver-webpack": "^0.8.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-quintoandar": "^1.1.0",
+    "eslint-plugin-react": "^6.7.1",
     "jest": "24.1.0",
     "metro-react-native-babel-preset": "0.51.1",
     "react-test-renderer": "16.6.3"
