@@ -6,7 +6,7 @@ import NavigationBar from './src/components/NavigationBar';
 import CardBus from './src/components/CardBus';
 import CardAulas from './src/components/CardAulas';
 import CardRU from './src/components/CardRU';
-import Carousel from 'react-native-snap-carousel';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 
 const itens = [
   1,
@@ -18,6 +18,28 @@ export default class App extends Component {
   _renderItem ({item, index}) {
     return (
         <CardBus />
+    );
+  }
+
+  get pagination () {
+    return (
+        <Pagination
+          dotsLength={itens.length}
+          activeDotIndex={1}
+          containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
+          dotStyle={{
+              width: 10,
+              height: 10,
+              borderRadius: 5,
+              marginHorizontal: 8,
+              backgroundColor: 'rgba(255, 255, 255, 0.92)'
+          }}
+          inactiveDotStyle={{
+              // Define styles for inactive dots here
+          }}
+          inactiveDotOpacity={0.4}
+          inactiveDotScale={0.6}
+        />
     );
 }
 
@@ -33,6 +55,7 @@ export default class App extends Component {
               sliderWidth={350}
               itemWidth={350}
             />
+        { this.pagination }
       </Screen>
     );
   }
