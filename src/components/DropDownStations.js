@@ -1,54 +1,39 @@
 import React, { Component } from 'react';
-import { StyleSheet, Alert } from 'react-native';
-import { DropDownMenu } from '@shoutem/ui';
+import { Dropdown } from 'react-native-material-dropdown';
+import { max } from 'moment';
 
 export default class DropDownStations extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       stations: [
         {
-          station: "Santo André",
+          value: 'Santo André',
         },
         {
-          station: "São Bernardo",
+          value: 'São Bernardo',
         },
         {
-          station: "Term. Leste",
+          value: 'Term. Leste',
         },
         {
-          station: "Praça dos Expedicionários",
+          value: 'Praça dos Expedicionários',
         },
         {
-          station: "Term. SBC",
+          value: 'Term. SBC',
         },
       ],
-    }
+    };
   }
 
   render() {
     return (
-      <DropDownMenu
-        styleName="horizontal"
-        options={this.state.stations}
-        selectedOption={this.state.selectedStation ? this.state.selectedStation : this.state.stations[0]}
-        onOptionSelected={(station) => {
-          this.setState({ selectedStation : station })
-          this.props.onSelectedStation(station.station)
-        }}
-        titleProperty="station"
-        valueProperty="stations.station"
-        style={styles.dropDown}
+      <Dropdown
+        label={this.props.origin ? 'Partida' : 'Destino'}
+        value={this.props.value}
+        data={this.state.stations}
+        dropdownOffset={{ top: 16, left: 0 }}
       />
-    )
+    );
   }
 }
-
-const styles = StyleSheet.create({
-  dropDown: {
-    width: 50,
-    height: 50,
-    backgroundColor: '#FFF',
-    fontSize: 100,
-  },
-});

@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
-import { 
+import {
   Heading,
   Title,
   Subtitle,
 } from '@shoutem/ui';
+import IconMaterial from 'react-native-vector-icons/MaterialIcons';
+
+import ElevatedView from 'react-native-elevated-view';
 import { StyleSheet, View, Alert, AsyncStorage } from 'react-native';
 
 import axios from 'axios';
 
 import DropDownStations from './DropDownStations';
 import ChangeItem from './ChangeItem';
-import IconMaterial from 'react-native-vector-icons/MaterialIcons';
+
 import commonStyles from '../styles/commonStyles';
-import ElevatedView from 'react-native-elevated-view';
 import { urlServer, dayOfTheWeek, hour, minutes } from '../common';
 
 export default class CardBus extends Component {
@@ -183,28 +185,29 @@ export default class CardBus extends Component {
     this.loadSchedules();
   }
 
-
-
   render() {
     return (
       <ElevatedView
         elevation={5}
         style={styles.stayElevated}
       >
-        <Title style={styles.originDestinyText}>{this.state.nextSchedules.length}</Title>
-        <DropDownStations onSelectedStation={(newOrigin) => this.updateOrigin(newOrigin) } />
-        <View style={styles.originDestinyGroup}>
-          <Title style={styles.originDestinyText}>{this.state.teste}</Title>
-          <IconMaterial name='compare-arrows' style={{ transform: [{ rotate: '90deg'}], marginRight: 5 }} size={30} color={commonStyles.colors.black} />
-        </View>
-        <DropDownStations onSelectedStation={(newDestiny) => this.updateDestiny(newDestiny)} />
         <View style={styles.centralizeItems}>
-          <Subtitle styleName="sm-gutter-top">{this.state.lastSchedule}</Subtitle>
-          <Heading style={{ color: commonStyles.colors.principal }}>25 min</Heading>
-          <Subtitle styleName="sm-gutter-top" style={{ color: commonStyles.colors.blueInfos }}>Você vai chegar ás 22h30</Subtitle>
+          <Title style={styles.title}>Fretado</Title>
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 10 }}>
-          <ChangeItem text={'Outros horários'} style={{ paddingLeft: 5 }} />
+        <View style={{ marginLeft: 16, marginRight: 16 }}>
+          <DropDownStations origin value={'Santo André'} />
+        </View>
+        <View style={styles.originDestinyGroup}>
+          <IconMaterial name={'compare-arrows'} style={styles.icon} size={30} color={commonStyles.colors.black} />
+        </View>
+        <View style={{ marginLeft: 16, marginRight: 16 }}>
+          <DropDownStations origin={false} value={'Terminal leste'} />
+        </View>
+        <View style={styles.centralizeItems}>
+          <Subtitle>{this.state.lastSchedule}</Subtitle>
+          <Heading style={{ color: commonStyles.colors.principal }}>25 min</Heading>
+          <Subtitle style={{ color: commonStyles.colors.blueInfos }}>Você vai chegar ás 22h30</Subtitle>
+          <ChangeItem text={'Outros horários'} />
           <Subtitle style={styles.moreAboutBus}>Ver mais sobre fretados</Subtitle>
         </View>
       </ElevatedView>
@@ -216,26 +219,29 @@ const styles = StyleSheet.create({
   stayElevated: {
     height: '90%',
     width: '100%',
-    marginLeft: 10,
-    marginRight: 10,
     backgroundColor: 'white',
   },
-  originDestinyText: {
+  title: {
     paddingLeft: 10,
     paddingTop: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   originDestinyGroup: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'flex-end',
   },
   centralizeItems: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 15,
   },
   moreAboutBus: {
     color: commonStyles.colors.principal,
+    marginTop: 10,
+  },
+  icon: {
+    transform: [{ rotate: '90deg' }],
     marginRight: 10,
   },
 });

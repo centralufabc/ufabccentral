@@ -3,15 +3,15 @@ import {
   View,
   Text,
 } from 'react-native';
-import { Icon } from '@shoutem/ui';
+import { Icon, Subtitle } from '@shoutem/ui';
 import commonStyles from '../styles/commonStyles';
 
 export default props => {
   return (
-    <View style={{ flexDirection: 'row' }}>
-        <Icon name="left-arrow" />
-        <Text style={{ fontFamily: commonStyles.fontFamily, paddingTop: 4 }}>{props.text ? props.text : 'Outros' }</Text>
-        <Icon name="right-arrow" />
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <Icon name="left-arrow" />
+      <Subtitle style={{ fontFamily: commonStyles.fontFamily }}>{props.text ? props.text : 'Outros' }</Subtitle>
+      <Icon name="right-arrow" />
     </View>
   )
 };

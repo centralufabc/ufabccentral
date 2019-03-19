@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import ElevatedView from 'react-native-elevated-view';
 import commonStyles from '../styles/commonStyles';
-import ElevatedView from 'react-native-elevated-view'
 import ChangeItem from './ChangeItem';
 
 export default class CardAulas extends Component {
@@ -28,8 +28,6 @@ const styles = StyleSheet.create({
   stayElevated: {
     height: '90%',
     width: '100%',
-    marginLeft: 10,
-    marginRight: 5,
     backgroundColor: 'white',
   },
   className: {

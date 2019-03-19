@@ -33,8 +33,6 @@ const styles = StyleSheet.create({
   stayElevated: {
     height: '90%',
     width: '100%',
-    marginLeft: 5,
-    marginRight: 10,
     backgroundColor: 'white',
   },
   title: {

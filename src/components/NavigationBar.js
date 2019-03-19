@@ -4,16 +4,16 @@ import {
   View,
   Platform,
 } from 'react-native';
-import { Title } from '@shoutem/ui';
+import { Heading } from '@shoutem/ui';
 import commonStyles from '../styles/commonStyles';
 
 export default NavigationBar = () => {
   return (
     <View style={styles.container}>
-        <Title style={styles.title}>Central UFABC</Title>
+      <Heading style={styles.title}>Central UFABC</Heading>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   title: {
-    paddingTop: Platform.OS === 'ios' ? 30 : 0,
+    paddingTop: Platform.OS === 'ios' ? 35 : 10,
     color: commonStyles.colors.white,
   },
 });
