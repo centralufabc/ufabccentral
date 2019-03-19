@@ -7,12 +7,10 @@ import {
 import { Title } from '@shoutem/ui';
 import commonStyles from '../styles/commonStyles';
 
-export default props => {
+export default NavigationBar = () => {
   return (
     <View style={styles.container}>
-      <View style={styles.rowContainer}>
         <Title style={styles.title}>Central UFABC</Title>
-      </View>
     </View>
   )
 }
@@ -20,19 +18,14 @@ export default props => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 0,
-    backgroundColor: commonStyles.colors.principal,
-    padding: 10,
-    borderBottomWidth: 1,
-    borderColor: '#BBB',
     width: '100%',
-  },
-  rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingBottom: 20,
   },
   title: {
-    paddingTop: Platform.OS === 'ios' ? 20 : 0, 
+    paddingTop: Platform.OS === 'ios' ? 30 : 0,
     color: commonStyles.colors.white,
   },
 });

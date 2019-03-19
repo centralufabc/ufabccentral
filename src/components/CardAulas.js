@@ -26,7 +26,8 @@ export default class CardAulas extends Component {
 
 const styles = StyleSheet.create({
   stayElevated: {
-    width: '47%',
+    height: '90%',
+    width: '100%',
     marginLeft: 10,
     marginRight: 5,
     backgroundColor: 'white',
