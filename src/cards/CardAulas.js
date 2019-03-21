@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import ElevatedView from 'react-native-elevated-view';
 import commonStyles from '../styles/commonStyles';
-import ChangeItem from './ChangeItem';
+import ChangeItem from './../components/ChangeItem';
 
 export default class CardAulas extends Component {
   render() {

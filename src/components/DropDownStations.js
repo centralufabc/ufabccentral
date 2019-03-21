@@ -1,39 +1,16 @@
 import React, { Component } from 'react';
 import { Dropdown } from 'react-native-material-dropdown';
-import { max } from 'moment';
 
-export default class DropDownStations extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      stations: [
-        {
-          value: 'Santo André',
-        },
-        {
-          value: 'São Bernardo',
-        },
-        {
-          value: 'Term. Leste',
-        },
-        {
-          value: 'Praça dos Expedicionários',
-        },
-        {
-          value: 'Term. SBC',
-        },
-      ],
-    };
-  }
+export default props => {
+  return (
+    <Dropdown
+      label={props.origin ? 'Partida' : 'Destino'}
+      value={props.value}
+      data={props.stations}
+      dropdownOffset={{ top: 16, left: 0 }}
+      onChangeText={(value) => props.onChange(value)}
+      itemCount={props.itemCount ? props.itemCount : 4}
+    />
+  );
+};
 
-  render() {
-    return (
-      <Dropdown
-        label={this.props.origin ? 'Partida' : 'Destino'}
-        value={this.props.value}
-        data={this.state.stations}
-        dropdownOffset={{ top: 16, left: 0 }}
-      />
-    );
-  }
-}

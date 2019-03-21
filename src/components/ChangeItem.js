@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   View,
-  Text,
+  TouchableOpacity,
 } from 'react-native';
 import { Icon, Subtitle } from '@shoutem/ui';
 import commonStyles from '../styles/commonStyles';
@@ -9,9 +9,13 @@ import commonStyles from '../styles/commonStyles';
 export default props => {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <Icon name="left-arrow" />
+      <TouchableOpacity onPress={props.last}>
+        {props.isFirst ? [] : <Icon name="left-arrow" />}
+      </TouchableOpacity>
       <Subtitle style={{ fontFamily: commonStyles.fontFamily }}>{props.text ? props.text : 'Outros' }</Subtitle>
-      <Icon name="right-arrow" />
+      <TouchableOpacity onPress={props.next}>
+        {props.isLast ? [] : <Icon name="right-arrow" />}
+      </TouchableOpacity>
     </View>
   )
 };

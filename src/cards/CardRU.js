@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import commonStyles from '../styles/commonStyles';
 import ElevatedView from 'react-native-elevated-view'
-import ChangeItem from './ChangeItem';
+import ChangeItem from './../components/ChangeItem';
 
 export default class CardRU extends Component {
   render() {
