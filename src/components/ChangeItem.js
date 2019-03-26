@@ -1,17 +1,21 @@
 import React from 'react';
 import {
   View,
-  Text,
+  TouchableOpacity,
 } from 'react-native';
-import { Icon } from '@shoutem/ui';
+import { Icon, Subtitle } from '@shoutem/ui';
 import commonStyles from '../styles/commonStyles';
 
 export default props => {
   return (
-    <View style={{ flexDirection: 'row' }}>
-        <Icon name="left-arrow" />
-        <Text style={{ fontFamily: commonStyles.fontFamily, paddingTop: 4 }}>{props.text ? props.text : 'Outros' }</Text>
-        <Icon name="right-arrow" />
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <TouchableOpacity onPress={props.last}>
+        {props.isFirst ? [] : <Icon name="left-arrow" />}
+      </TouchableOpacity>
+      <Subtitle style={{ fontFamily: commonStyles.fontFamily }}>{props.text ? props.text : 'Outros' }</Subtitle>
+      <TouchableOpacity onPress={props.next}>
+        {props.isLast ? [] : <Icon name="right-arrow" />}
+      </TouchableOpacity>
     </View>
   )
 };

@@ -15,8 +15,10 @@
     "react": "16.6.3",
     "react-moment": "^0.8.4",
     "react-native": "0.58.4",
+    "react-native-dropdown": "0.0.6",
     "react-native-elevated-view": "0.0.6",
     "react-native-gesture-handler": "^1.0.17",
+    "react-native-material-dropdown": "^0.11.1",
     "react-native-snap-carousel": "^3.7.5",
     "react-native-vector-icons": "^6.4.1",
     "react-navigation": "2.14.2"

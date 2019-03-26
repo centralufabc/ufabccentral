@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import commonStyles from '../styles/commonStyles';
 import ElevatedView from 'react-native-elevated-view'
-import ChangeItem from './ChangeItem';
+import ChangeItem from './../components/ChangeItem';
 
 export default class CardRU extends Component {
   render() {
@@ -33,8 +33,6 @@ const styles = StyleSheet.create({
   stayElevated: {
     height: '90%',
     width: '100%',
-    marginLeft: 5,
-    marginRight: 10,
     backgroundColor: 'white',
   },
   title: {

@@ -4,23 +4,19 @@ import { StyleSheet, Platform, Dimensions } from 'react-native';
 import { Screen } from '@shoutem/ui';
 import commonStyles from './src/styles/commonStyles';
 import NavigationBar from './src/components/NavigationBar';
-import CardBus from './src/components/CardBus';
-import CardAulas from './src/components/CardAulas';
-import CardRU from './src/components/CardRU';
+import CardBus from './src/cards/Bus/CardBus';
+import CardAulas from './src/cards/CardAulas';
+import CardRU from './src/cards/CardRU';
 
-const IS_IOS = Platform.OS === 'ios';
-const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
+const { width: viewportWidth } = Dimensions.get('window');
 
 function wp(percentage) {
-    const value = (percentage * viewportWidth) / 100;
-    return Math.round(value);
+  const value = (percentage * viewportWidth) / 100;
+  return Math.round(value);
 }
-
-const slideHeight = viewportHeight * 0.36;
 const slideWidth = wp(75);
-const itemHorizontalMargin = wp(2);
 export const sliderWidth = viewportWidth;
-export const itemWidth = slideWidth + itemHorizontalMargin * 2;
+export const itemWidth = slideWidth;
 
 const cards = [
   <CardBus />,
@@ -30,7 +26,7 @@ const cards = [
 
 export default class App extends Component {
   state = {
-    index: 0,
+    index: 1,
   }
   _renderItem = ({ index }) => cards[index];
 
@@ -39,12 +35,12 @@ export default class App extends Component {
       <Pagination
         dotsLength={cards.length}
         activeDotIndex={this.state.index}
-        containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
         dotStyle={{
           width: 10,
           height: 10,
           borderRadius: 5,
           marginHorizontal: 8,
+          backgroundColor: 'rgba(255, 255, 255, 0.92)',
         }}
         inactiveDotOpacity={0.4}
         inactiveDotScale={0.6}
