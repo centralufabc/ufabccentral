@@ -7,7 +7,14 @@ import {
 import IconMaterial from 'react-native-vector-icons/MaterialIcons';
 
 import ElevatedView from 'react-native-elevated-view';
-import { StyleSheet, View, Alert, AsyncStorage } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Alert,
+  AsyncStorage,
+  TouchableOpacity,
+  Linking,
+} from 'react-native';
 
 import axios from 'axios';
 
@@ -15,15 +22,15 @@ import DropDownStations from '../../components/DropDownStations';
 import ChangeItem from '../../components/ChangeItem';
 
 import commonStyles from '../../styles/commonStyles';
-import { urlServer, linesAvaliable, hour, minutes, formatHour } from '../../common';
+import { urlServer, linesAvaliable, hour, minutes, formatHour, pdfFilesLink } from '../../common';
 
 export default class CardBus extends Component {
-  state = {
+  state = { //eslint-disable-line
     stations: [{ value: 'Santo André', origins: ['Terminal leste', 'São Bernardo', 'Terminal SBC'] }, { value: 'Terminal leste', origins: ['Santo André', 'São Bernardo', 'Terminal SBC'] }, { value: 'São Bernardo', origins: ['Santo André', 'Terminal leste', 'Praça dos expedicionários', 'Terminal SBC'] }, { value: 'Terminal SBC', origins: ['Santo André', 'Terminal leste', 'Praça dos expedicionários', 'São Bernardo'] }, { value: 'Praça dos expedicionários', origins: ['Terminal SBC', 'São Bernardo'] }],
     stationsDestiny: [{ value: 'Terminal leste', origins: ['Santo André', 'São Bernardo', 'Terminal SBC'] }, { value: 'São Bernardo', origins: ['Santo André', 'Terminal leste', 'Praça dos expedicionários', 'Terminal SBC'] }, { value: 'Terminal SBC', origins: ['Santo André', 'Terminal leste', 'Praça dos expedicionários', 'São Bernardo'] }],
     keyOrigin: '',
     keyDestiny: '',
-    lastSchedule: 'O último fretado foi há 5 min',
+    lastSchedule: '',
     schedules: [],
     nextSchedules: [],
     updated: 0,
@@ -43,12 +50,14 @@ export default class CardBus extends Component {
 
   updateOrigin = (stationSelected) => {
     this.setState({ origin: stationSelected });
+    AsyncStorage.setItem('origin', stationSelected);
     this.filterStations(stationSelected);
     this.identifyKeys();
   }
 
   updateDestiny = (stationSelected) => {
     this.setState({ destiny: stationSelected });
+    AsyncStorage.setItem('destiny', stationSelected);
     this.identifyKeys();
   }
 
@@ -63,7 +72,25 @@ export default class CardBus extends Component {
 
   loadSchedules = async () => {
     await AsyncStorage.getItem('fretados', (error, result) => {
-      this.setState({ schedules: JSON.parse(result).schedules });
+      if (result) {
+        this.setState({ schedules: JSON.parse(result).schedules });
+      }
+    });
+    await AsyncStorage.getItem('origin', (error, result) => {
+      if (result) {
+        this.updateOrigin(result);
+      }
+    });
+    await AsyncStorage.getItem('destiny', (error, result) => {
+      if (result) {
+        this.updateDestiny(result);
+      }
+    });
+  }
+
+  openPDFFiles = () => {
+    Linking.canOpenURL(pdfFilesLink).then(() => {
+      Linking.openURL(pdfFilesLink);
     });
   }
 
@@ -71,13 +98,13 @@ export default class CardBus extends Component {
     if (this.state.origin === 'Santo André') {
       switch (this.state.destiny) {
         case 'Terminal leste':
-          this.setState({ keyOrigin: 'SALeste', keyDestiny: 'Leste'}, this.searchSchedules );
+          this.setState({ keyOrigin: 'SALeste', keyDestiny: 'Leste'}, this.searchSchedules);
           break;
         case 'São Bernardo':
-          this.setState({ keyOrigin: 'SALeste', keyDestiny: 'SBC' }, this.searchSchedules );
+          this.setState({ keyOrigin: 'SALeste', keyDestiny: 'SBC' }, this.searchSchedules);
           break;
         case 'Terminal SBC':
-          this.setState({ keyOrigin: 'SALeste', keyDestiny: 'TermPraca' }, this.searchSchedules );
+          this.setState({ keyOrigin: 'SALeste', keyDestiny: 'TermPraca' }, this.searchSchedules);
           break;
         default:
           this.searchSchedules();
@@ -148,18 +175,45 @@ export default class CardBus extends Component {
   }
 
   searchSchedules = () => {
-    const time = (hour * 60) + minutes;
+    const time = (hour() * 60) + minutes();
     const resultSearch = this.state.schedules.filter((value) => {
-      if (formatHour(value[this.state.keyOrigin]) > time
+      if (formatHour(value[this.state.keyOrigin]) >= time
          && formatHour(value[this.state.keyOrigin]) <= (time + 60)
          && linesAvaliable().includes(value['Linha'])
-         && value[this.state.keyDestiny]) {
+         && value[this.state.keyDestiny]
+         && time > 60) {
         return value;
       }
     });
     resultSearch.sort(this.dynamicSort(this.state.keyOrigin));
     this.setState({ nextSchedules: resultSearch, index: 0 });
+    this.searchLastSchedule();
   };
+
+  reverseStations = () => {
+    const oldOrigin = this.state.origin;
+    const oldDestiny = this.state.destiny;
+    this.updateOrigin(oldDestiny);
+    this.updateDestiny(oldOrigin);
+  }
+
+  searchLastSchedule = () => {
+    const time = (hour() * 60) + minutes();
+    const resultSearch = this.state.schedules.filter((value) => {
+      if (formatHour(value[this.state.keyOrigin]) < time
+         && formatHour(value[this.state.keyOrigin]) >= (time - 60)
+         && linesAvaliable().includes(value['Linha'])
+         && value[this.state.keyDestiny]
+         && time > 60) {
+        return value;
+      }
+    });
+    if (resultSearch.length > 0) {
+      resultSearch.sort(this.dynamicSort(this.state.keyOrigin));
+      const textLastSchedule = 'O último foi ' + this.nameLine(resultSearch[resultSearch.length - 1]) +  ' há ' + (time - formatHour(resultSearch[resultSearch.length - 1][this.state.keyOrigin])) + 'min';
+      this.setState({ lastSchedule: textLastSchedule });
+    }
+  }
 
   dynamicSort = (property) => {
     var sortOrder = 1;
@@ -176,7 +230,7 @@ export default class CardBus extends Component {
   timeForNext = () => {
     const next = this.state.nextSchedules[this.state.index];
     if (next) {
-      const time = formatHour(next[this.state.keyOrigin]) - ((hour * 60) + minutes);
+      const time = formatHour(next[this.state.keyOrigin]) - ((hour() * 60) + minutes());
       if (time > 1) {
         return time + ' minutos'; 
       }
@@ -203,8 +257,7 @@ export default class CardBus extends Component {
     return 'Sem fretado na próxima hora';
   }
 
-  nameLine = () => {
-    const next = this.state.nextSchedules[this.state.index];
+  nameLine = (next) => {
     if (next) {
       const numberLine = parseInt(next['Linha']);
       if (numberLine <= 6) {
@@ -221,7 +274,9 @@ export default class CardBus extends Component {
     return '';
   }
 
-  isLast = () => this.state.index === (this.state.nextSchedules.length - 1);
+  isLast = () => this.state.nextSchedules.length !== 0 ?
+  this.state.index === (this.state.nextSchedules.length - 1) :
+  true;
 
   isFirst = () => this.state.index === 0;
 
@@ -243,6 +298,7 @@ export default class CardBus extends Component {
     this.downloadSchedules();
     this.loadSchedules();
     this.filterStations(this.state.stations[0].value);
+    setInterval(this.searchSchedules, 1000);
   }
 
   render() {
@@ -255,21 +311,25 @@ export default class CardBus extends Component {
           <Title style={styles.title}>Fretado</Title>
         </View>
         <View style={{ marginLeft: 16, marginRight: 16 }}>
-          <DropDownStations stations={this.state.stations} itemCount={5} onChange={(station) => this.updateOrigin(station)} origin value={this.state.stations[0].value} />
+          <DropDownStations stations={this.state.stations} itemCount={5} onChange={(station) => this.updateOrigin(station)} origin value={this.state.origin} />
         </View>
-        <View style={styles.originDestinyGroup}>
-          <IconMaterial name={'compare-arrows'} style={styles.icon} size={30} color={commonStyles.colors.black} />
-        </View>
+        <TouchableOpacity onPress={() => this.reverseStations()}>
+          <View style={styles.originDestinyGroup}>
+            <IconMaterial name={'compare-arrows'} style={styles.icon} size={30} color={commonStyles.colors.black} />
+          </View>
+        </TouchableOpacity>
         <View style={{ marginLeft: 16, marginRight: 16 }}>
-          <DropDownStations stations={this.state.stationsDestiny} onChange={(station) => this.updateDestiny(station)} origin={false} value={this.state.stationsDestiny[0].value} />
+          <DropDownStations stations={this.state.stationsDestiny} onChange={(station) => this.updateDestiny(station)} origin={false} value={this.state.destiny} />
         </View>
         <View style={styles.centralizeItems}>
           <Subtitle>{this.state.lastSchedule}</Subtitle>
           <Heading style={{ color: commonStyles.colors.principal }}>{this.timeForNext()}</Heading>
-          <Subtitle>{this.nameLine()}</Subtitle>
+          <Subtitle>{this.nameLine(this.state.nextSchedules[this.state.index])}</Subtitle>
           <Subtitle style={{ color: commonStyles.colors.blueInfos }}>{this.arrivalTime()}</Subtitle>
           <ChangeItem isLast={this.isLast()} isFirst={this.isFirst()} next={() => this.next()} last={() => this.last()} text={'Outros horários'} />
-          <Subtitle style={styles.moreAboutBus}>Ver tabelas em PDF</Subtitle>
+          <TouchableOpacity onPress={() => this.openPDFFiles()}>
+            <Subtitle style={styles.moreAboutBus}>Ver tabelas em PDF</Subtitle>
+          </TouchableOpacity>
         </View>
       </ElevatedView>
     );

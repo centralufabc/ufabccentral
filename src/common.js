@@ -13,9 +13,11 @@ function isIphoneXorAbove() {
 
 const dayOfTheWeek = moment().day();
 
-const hour = moment().hours();
+const hour = () => moment().hours();
 
-const minutes = moment().minutes();
+const minutes = () => moment().minutes();
+
+export const pdfFilesLink = 'https://drive.google.com/drive/folders/1A2sBcwvxql6YPFPG_CoMnVxBVjgOYlHx?usp=sharing';
 
 const urlServer = 'http://165.227.124.82';
 
@@ -44,6 +46,6 @@ export const linesAvaliable = () => {
     return [7];
   }
   return [1, 2, 3, 4, 5, 6];
-}
+};
 
 export { isIphoneXorAbove, urlServer, dayOfTheWeek, hour, minutes };
