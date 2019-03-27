@@ -1,10 +1,32 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Alert, AsyncStorage } from 'react-native';
 import commonStyles from '../styles/commonStyles';
 import ElevatedView from 'react-native-elevated-view'
 import ChangeItem from './../components/ChangeItem';
 
+import { urlServer, dateFormated } from '../common';
+
+import axios from 'axios';
+
+import {
+  Title,
+} from '@shoutem/ui';
+
 export default class CardRU extends Component {
+  downloadMenus = async () => {
+    try {
+      const res = await axios.get(`${urlServer}/ru/cardapio/${dateFormated()}`);
+      AsyncStorage.setItem('cardapios', JSON.stringify(res.data.Cardapios));
+    } catch (err) {
+      Alert.alert('Erro', err);
+    }
+  }
+
+  componentDidMount () {
+    this.downloadMenus();
+  }
+
+
   render() {
     return (
       <ElevatedView
@@ -12,6 +34,7 @@ export default class CardRU extends Component {
         style={styles.stayElevated}
       >
         <View style={{ width: '100%', alignItems: 'center' }}>
+          <Title style={styles.title}>Restaurante</Title>
           <ChangeItem text={'Segunda'} style={{ marginBottom: 15 }} />
         </View>
         <Text style={styles.title}>Almoço</Text>

@@ -11,7 +11,15 @@ function isIphoneXorAbove() {
   );
 }
 
-const dayOfTheWeek = moment().day();
+const dayOfTheWeek = () => moment().day();
+
+const year = () => moment().year();
+
+const day = () => moment().date();
+
+const month = () => moment().month() + 1;
+
+const dateFormated = () => year().toString() + (month() >= 10 ? month() : '0' + month()) + (day() >= 10 ? day() : '0' + day());
 
 const hour = () => moment().hours();
 
@@ -39,13 +47,13 @@ export const formatHour = (value) => {
 };
 
 export const linesAvaliable = () => {
-  if (dayOfTheWeek === 7) {
+  if (dayOfTheWeek() === 7) {
     return [];
   }
-  if (dayOfTheWeek === 6) {
+  if (dayOfTheWeek() === 6) {
     return [7];
   }
   return [1, 2, 3, 4, 5, 6];
 };
 
-export { isIphoneXorAbove, urlServer, dayOfTheWeek, hour, minutes };
+export { isIphoneXorAbove, urlServer, dateFormated, hour, minutes };
