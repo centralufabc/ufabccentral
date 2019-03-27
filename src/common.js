@@ -1,7 +1,7 @@
 import { Dimensions, Platform } from 'react-native';
 import moment from 'moment';
 
-function isIphoneXorAbove() {
+export function isIphoneXorAbove() {
   const dimen = Dimensions.get('window');
   return (
     Platform.OS === 'ios' &&
@@ -11,7 +11,28 @@ function isIphoneXorAbove() {
   );
 }
 
-const dayOfTheWeek = () => moment().day();
+export const dayOfTheWeek = () => moment().day();
+
+export const nameOfDayOfTheWeek = (day) => {
+  switch (day) {
+    case 1:
+      return 'Segunda';
+    case 2:
+      return 'Terça';
+    case 3:
+      return 'Quarta';
+    case 4:
+      return 'Quinta';
+    case 5:
+      return 'Sexta';
+    case 6:
+      return 'Sabado';
+    case 7:
+      return 'Domingo';
+    default:
+      return '';
+  }
+};
 
 const year = () => moment().year();
 
@@ -19,15 +40,15 @@ const day = () => moment().date();
 
 const month = () => moment().month() + 1;
 
-const dateFormated = () => year().toString() + (month() >= 10 ? month() : '0' + month()) + (day() >= 10 ? day() : '0' + day());
+export const dateFormated = () => year().toString() + (month() >= 10 ? month() : '0' + month()) + (day() >= 10 ? day() : '0' + day());
 
-const hour = () => moment().hours();
+export const hour = () => moment().hours();
 
-const minutes = () => moment().minutes();
+export const minutes = () => moment().minutes();
 
 export const pdfFilesLink = 'https://drive.google.com/drive/folders/1A2sBcwvxql6YPFPG_CoMnVxBVjgOYlHx?usp=sharing';
 
-const urlServer = 'http://165.227.124.82';
+export const urlServer = 'http://165.227.124.82';
 
 export const formatHour = (value) => {
   if (value) {
@@ -56,4 +77,15 @@ export const linesAvaliable = () => {
   return [1, 2, 3, 4, 5, 6];
 };
 
-export { isIphoneXorAbove, urlServer, dateFormated, hour, minutes };
+export const dynamicSort = (property) => {
+  let sortOrder = 1;
+  if (property[0] === '-') {
+    sortOrder = -1;
+    property = property.substr(1);
+  }
+  return function (a,b) {
+      var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+      return result * sortOrder;
+  }
+};
+

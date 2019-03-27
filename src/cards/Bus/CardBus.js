@@ -14,6 +14,7 @@ import {
   AsyncStorage,
   TouchableOpacity,
   Linking,
+  NetInfo,
 } from 'react-native';
 
 import axios from 'axios';
@@ -22,7 +23,7 @@ import DropDownStations from '../../components/DropDownStations';
 import ChangeItem from '../../components/ChangeItem';
 
 import commonStyles from '../../styles/commonStyles';
-import { urlServer, linesAvaliable, hour, minutes, formatHour, pdfFilesLink } from '../../common';
+import { urlServer, linesAvaliable, hour, minutes, formatHour, pdfFilesLink, dynamicSort } from '../../common';
 
 export default class CardBus extends Component {
   state = { //eslint-disable-line
@@ -64,10 +65,14 @@ export default class CardBus extends Component {
   downloadSchedules = async () => {
     try {
       const res = await axios.get(`${urlServer}/fretados`);
-      AsyncStorage.setItem('fretados', JSON.stringify(res.data.data));
-    } catch (err) {
-      Alert.alert('Erro', err);
-    }
+      await AsyncStorage.getItem('fretados', (error, result) => {
+        if (result) {
+          if (parseInt(res.data.data.updated) > parseInt(JSON.parse(result).updated)) {
+            AsyncStorage.setItem('fretados', JSON.stringify(res.data.data));
+          }
+        }
+      });
+    } catch (err) {}
   }
 
   loadSchedules = async () => {
@@ -185,10 +190,31 @@ export default class CardBus extends Component {
         return value;
       }
     });
-    resultSearch.sort(this.dynamicSort(this.state.keyOrigin));
-    this.setState({ nextSchedules: resultSearch, index: 0 });
-    this.searchLastSchedule();
+    resultSearch.sort(dynamicSort(this.state.keyOrigin));
+    if (!this.isEquivalent(resultSearch, this.state.nextSchedules)) {
+      this.setState({ nextSchedules: resultSearch, index: 0 });
+      this.searchLastSchedule();
+    }
   };
+
+  isEquivalent = (a, b) => {
+    const aProps = Object.getOwnPropertyNames(a);
+    const bProps = Object.getOwnPropertyNames(b);
+
+    if (aProps.length !== bProps.length) {
+      return false;
+    }
+
+    for (let i = 0; i < aProps.length; i++) {
+      const propName = aProps[i];
+
+      if (a[propName] !== b[propName]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 
   reverseStations = () => {
     const oldOrigin = this.state.origin;
@@ -209,23 +235,11 @@ export default class CardBus extends Component {
       }
     });
     if (resultSearch.length > 0) {
-      resultSearch.sort(this.dynamicSort(this.state.keyOrigin));
-      const textLastSchedule = 'O último foi ' + this.nameLine(resultSearch[resultSearch.length - 1]) +  ' há ' + (time - formatHour(resultSearch[resultSearch.length - 1][this.state.keyOrigin])) + 'min';
+      resultSearch.sort(dynamicSort(this.state.keyOrigin));
+      const textLastSchedule = 'O último foi ' + this.nameLine(resultSearch[resultSearch.length - 1]) +  ' há ' + (time - formatHour(resultSearch[resultSearch.length - 1][this.state.keyOrigin])) + ' min';
       this.setState({ lastSchedule: textLastSchedule });
     }
   }
-
-  dynamicSort = (property) => {
-    var sortOrder = 1;
-    if(property[0] === "-") {
-        sortOrder = -1;
-        property = property.substr(1);
-    }
-    return function (a,b) {
-        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-        return result * sortOrder;
-    }
-  };
 
   timeForNext = () => {
     const next = this.state.nextSchedules[this.state.index];
@@ -295,7 +309,11 @@ export default class CardBus extends Component {
   }
 
   componentDidMount() {
-    this.downloadSchedules();
+    NetInfo.isConnected.fetch().then((isConnected) => {
+      if (isConnected) {
+        this.downloadSchedules();
+      }
+    });
     this.loadSchedules();
     this.filterStations(this.state.stations[0].value);
     setInterval(this.searchSchedules, 1000);
@@ -343,8 +361,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   title: {
-    paddingLeft: 10,
     paddingTop: 5,
+    color: commonStyles.colors.principal,
     justifyContent: 'center',
     alignItems: 'center',
   },
