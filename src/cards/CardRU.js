@@ -44,12 +44,14 @@ export default class CardRU extends Component {
         if (filteredMenus.length > 0) {
           this.setState({ menus: filteredMenus });
         } else {
-          NetInfo.isConnected.fetch().then((isConnected) => {
+          NetInfo.isConnected.fetch().done((isConnected) => {
             if (isConnected) {
               this.downloadMenus();
             }
           });
         }
+      } else {
+        this.downloadMenus();
       }
     });
   }
