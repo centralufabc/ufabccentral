@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { StyleSheet, Platform, Dimensions } from 'react-native';
+import { Dimensions } from 'react-native';
 import { Screen } from '@shoutem/ui';
 import commonStyles from './src/styles/commonStyles';
 import NavigationBar from './src/components/NavigationBar';
-import CardBus from './src/cards/Bus/CardBus';
+import CardBus from './src/cards/CardBus';
 import CardAulas from './src/cards/CardAulas';
 import CardRU from './src/cards/CardRU';
 

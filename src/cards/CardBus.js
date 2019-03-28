@@ -10,7 +10,6 @@ import ElevatedView from 'react-native-elevated-view';
 import {
   StyleSheet,
   View,
-  Alert,
   AsyncStorage,
   TouchableOpacity,
   Linking,
@@ -19,11 +18,11 @@ import {
 
 import axios from 'axios';
 
-import DropDownStations from '../../components/DropDownStations';
-import ChangeItem from '../../components/ChangeItem';
+import DropDownStations from '../components/DropDownStations';
+import ChangeItem from '../components/ChangeItem';
 
-import commonStyles from '../../styles/commonStyles';
-import { urlServer, linesAvaliable, hour, minutes, formatHour, pdfFilesLink, dynamicSort } from '../../common';
+import commonStyles from '../styles/commonStyles';
+import { urlServer, linesAvaliable, hour, minutes, formatHour, pdfFilesLink, dynamicSort } from '../common';
 
 export default class CardBus extends Component {
   state = { //eslint-disable-line

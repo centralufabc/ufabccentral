@@ -12,7 +12,7 @@ export default props => {
       <TouchableOpacity onPress={props.last}>
         {props.isFirst ? [] : <Icon name="left-arrow" />}
       </TouchableOpacity>
-      <Subtitle style={{ fontFamily: commonStyles.fontFamily }}>{props.text ? props.text : 'Outros' }</Subtitle>
+      <Subtitle>{props.text ? props.text : 'Outros' }</Subtitle>
       <TouchableOpacity onPress={props.next}>
         {props.isLast ? [] : <Icon name="right-arrow" />}
       </TouchableOpacity>

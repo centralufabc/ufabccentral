@@ -32,21 +32,18 @@ const styles = StyleSheet.create({
   },
   className: {
     textAlign: 'center',
-    fontFamily: commonStyles.fontFamily,
     marginLeft: 5,
     marginRight: 5,
     marginTop: 10,
     marginBottom: 5,
   },
   schedule: {
-    fontFamily: commonStyles.fontFamily,
     marginBottom: 5,
     textAlign: 'center',
     color: commonStyles.colors.principal,
   },
   teacherName: {
     textAlign: 'center',
-    fontFamily: commonStyles.fontFamily,
     marginLeft: 5,
     marginRight: 5,
     marginBottom: 5,
@@ -54,7 +51,6 @@ const styles = StyleSheet.create({
   moreAboutClassRooms: {
     color: commonStyles.colors.principal,
     marginTop: 10,
-    fontFamily: commonStyles.fontFamily,
     marginLeft: 5,
     marginRight: 5,
     marginBottom: 5,
