@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
+import { StyleSheet, View, AsyncStorage, TouchableOpacity, NetInfo } from 'react-native';
 import Dialog, { SlideAnimation, DialogContent, DialogButton, DialogFooter } from 'react-native-popup-dialog';
 import { Title, Subtitle, TextInput } from '@shoutem/ui';
 import axios from 'axios';
@@ -18,6 +18,21 @@ export default class CardAulas extends Component {
     ra: 0,
     nextRA: '',
     dialogVisible: false,
+  }
+
+  loadRA = async () => {
+    await AsyncStorage.getItem('ra', (error, result) => {
+      if (result) {
+        this.setState({ ra: result }, () => {
+          NetInfo.isConnected.fetch().then((isConnected) => {
+            if (isConnected) {
+              this.downloadClassRooms();
+            }
+          });
+
+        });
+      }
+    });
   }
 
   downloadClassRooms = async () => {
@@ -129,8 +144,17 @@ export default class CardAulas extends Component {
     }
   }
 
+  saveRA = () => {
+    AsyncStorage.setItem('ra', this.state.nextRA.toString());
+    this.setState({ ra: this.state.nextRA, dialogVisible: false }, this.downloadClassRooms);
+  }
+
+  biweeklyText = () => {
+    return biweekly().substring(0, 1).toUpperCase() + biweekly().substring(1);
+  }
+
   componentDidMount() {
-    this.downloadClassRooms();
+    this.loadRA();
     this.loadClassRooms();
   }
 
@@ -142,12 +166,15 @@ export default class CardAulas extends Component {
       >
         <View style={{ alignItems: 'center' }}>
           <Title style={styles.title}>Aulas</Title>
-          <Subtitle style={styles.title}>Quinzenal I</Subtitle>
+          <Subtitle style={styles.title}>{this.biweeklyText()}</Subtitle>
           <Subtitle style={styles.className}>{this.state.classesToday[this.state.index] ? this.state.classesToday[this.state.index].className : '-'}</Subtitle>
           <Subtitle style={styles.schedule}>{this.state.classesToday[this.state.index] ? this.formatTime() : '-'}</Subtitle>
           <Subtitle style={styles.teacherName}>{this.state.classesToday[this.state.index] ? this.state.classesToday[this.state.index].teacherName : '-'}</Subtitle>
           <Subtitle style={styles.schedule}>{this.state.classesToday[this.state.index] ? this.state.classesToday[this.state.index].room : '-'}</Subtitle>
           <ChangeItem isLast={this.isLast()} isFirst={this.isFirst()} next={() => this.next()} last={() => this.last()} text={'Outras aulas'} />
+          <TouchableOpacity onPress={() => this.setState({ dialogVisible: true })}>
+            <Subtitle style={styles.addRA}>{this.state.ra === 0 ? 'Toque aqui para adicionar seu RA\n' : 'Aulas do RA: ' + this.state.ra + '\nToque aqui para editar'}</Subtitle>
+          </TouchableOpacity>
         </View>
         <Dialog
           visible={this.state.dialogVisible}
@@ -162,7 +189,7 @@ export default class CardAulas extends Component {
               />
               <DialogButton
                 text="OK"
-                onPress={() => this.setState({ ra: this.state.nextRA, dialogVisible: false }, this.downloadClassRooms)}
+                onPress={this.saveRA}
               />
             </DialogFooter>
           }
@@ -198,6 +225,11 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     textAlign: 'center',
     color: commonStyles.colors.principal,
+  },
+  addRA: {
+    marginTop: 15,
+    textAlign: 'center',
+    color: commonStyles.colors.blueInfos,
   },
   teacherName: {
     textAlign: 'center',
