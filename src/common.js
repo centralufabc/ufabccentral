@@ -34,11 +34,11 @@ export const nameOfDayOfTheWeek = (day) => {
   }
 };
 
-const year = () => moment().year();
+export const year = () => moment().year();
 
-const day = () => moment().date();
+export const day = () => moment().date();
 
-const month = () => moment().month() + 1;
+export const month = () => moment().month() + 1;
 
 export const dateFormated = () => year().toString() + (month() >= 10 ? month() : '0' + month()) + (day() >= 10 ? day() : '0' + day());
 

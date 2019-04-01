@@ -7,6 +7,7 @@ import NavigationBar from './src/components/NavigationBar';
 import CardBus from './src/cards/CardBus';
 import CardAulas from './src/cards/CardAulas';
 import CardRU from './src/cards/CardRU';
+import CardCalendar from './src/cards/CardCalendar';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -22,6 +23,7 @@ const cards = [
   <CardBus />,
   <CardAulas />,
   <CardRU />,
+  <CardCalendar />,
 ];
 
 export default class App extends Component {

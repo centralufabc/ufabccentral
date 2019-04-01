@@ -35,7 +35,7 @@ export default class CardBus extends Component {
     nextSchedules: [],
     updated: 0,
     origin: 'Santo André',
-    destiny: 'Terminal leste',
+    destiny: 'São Bernardo',
     index: 0,
   }
 
@@ -45,30 +45,29 @@ export default class CardBus extends Component {
         return value;
       }
     });
-    this.setState({ stationsDestiny: destinys, destiny: destinys[0].value });
+    this.setState({ stationsDestiny: destinys, destiny: destinys[0].value }, this.identifyKeys);
+    AsyncStorage.setItem('destiny', destinys[0].value);
   };
 
-  updateOrigin = () => {
-    AsyncStorage.setItem('origin', this.state.origin);
-    this.filterStations(this.state.origin);
-    this.identifyKeys();
+  updateOrigin = (stationSelected) => {
+    this.setState({ origin: stationSelected }, () => {
+      AsyncStorage.setItem('origin', stationSelected);
+      this.filterStations(stationSelected);
+    });
   }
 
-  updateDestiny = () => {
-    AsyncStorage.setItem('destiny', this.state.destiny);
-    this.identifyKeys();
+  updateDestiny = (stationSelected) => {
+    this.setState({ destiny: stationSelected }, () => {
+      AsyncStorage.setItem('destiny', stationSelected);
+      this.identifyKeys();
+    });
   }
 
   downloadSchedules = async () => {
     try {
       const res = await axios.get(`${urlServer}/fretados`);
-      await AsyncStorage.getItem('fretados', (error, result) => {
-        if (result) {
-          if (parseInt(res.data.data.updated) > parseInt(JSON.parse(result).updated)) {
-            AsyncStorage.setItem('fretados', JSON.stringify(res.data.data));
-          }
-        }
-      });
+      AsyncStorage.setItem('fretados', JSON.stringify(res.data.data));
+      this.loadSchedules();
     } catch (err) {}
   }
 
@@ -78,15 +77,27 @@ export default class CardBus extends Component {
         this.setState({ schedules: JSON.parse(result).schedules });
       }
     });
+    let origin = this.state.origin;
+    let destiny = this.state.destiny;
     await AsyncStorage.getItem('origin', (error, result) => {
       if (result) {
-        this.setState({ origin: result }, this.updateOrigin);
+        origin = result;
       }
     });
     await AsyncStorage.getItem('destiny', (error, result) => {
       if (result) {
-        this.setState({ destiny: result }, this.updateDestiny);
+        destiny = result;
       }
+    });
+    this.setState({ origin }, () => {
+      const destinys = this.state.stations.filter((value) => {
+        if (value.origins.includes(origin)) {
+          return value;
+        }
+      });
+      this.setState({ stationsDestiny: destinys, destiny }, () => {
+        this.identifyKeys();
+      });
     });
   }
 
@@ -216,8 +227,18 @@ export default class CardBus extends Component {
   reverseStations = () => {
     const oldOrigin = this.state.origin;
     const oldDestiny = this.state.destiny;
-    this.setState({ origin: oldDestiny }, this.updateOrigin);
-    this.setState({ destiny: oldOrigin }, this.updateDestiny);
+    this.setState({ origin: oldDestiny }, () => {
+      AsyncStorage.setItem('origin', oldDestiny);
+      const destinys = this.state.stations.filter((value) => {
+        if (value.origins.includes(oldDestiny)) {
+          return value;
+        }
+      });
+      this.setState({ stationsDestiny: destinys, destiny: oldOrigin }, () => {
+        AsyncStorage.setItem('destiny', oldOrigin);
+        this.identifyKeys();
+      });
+    });
   }
 
   searchLastSchedule = () => {
@@ -312,7 +333,6 @@ export default class CardBus extends Component {
       }
     });
     this.loadSchedules();
-    this.filterStations(this.state.stations[0].value);
     setInterval(this.searchSchedules, 1000);
   }
 
@@ -326,7 +346,7 @@ export default class CardBus extends Component {
           <Title style={styles.title}>Fretado</Title>
         </View>
         <View style={{ marginLeft: 16, marginRight: 16 }}>
-          <DropDownStations stations={this.state.stations} itemCount={5} onChange={(station) => this.setState({ origin: station }, this.updateOrigin)} origin value={this.state.origin} />
+          <DropDownStations stations={this.state.stations} itemCount={5} onChange={(station) => this.updateOrigin(station)} origin value={this.state.origin} />
         </View>
         <TouchableOpacity onPress={() => this.reverseStations()}>
           <View style={styles.originDestinyGroup}>
@@ -334,7 +354,7 @@ export default class CardBus extends Component {
           </View>
         </TouchableOpacity>
         <View style={{ marginLeft: 16, marginRight: 16 }}>
-          <DropDownStations stations={this.state.stationsDestiny} onChange={(station) => this.setState({ destiny: station }, this.updateDestiny)} origin={false} value={this.state.destiny} />
+          <DropDownStations stations={this.state.stationsDestiny} onChange={(station) => this.updateDestiny(station)} origin={false} value={this.state.destiny} />
         </View>
         <View style={styles.centralizeItems}>
           <Subtitle>{this.state.lastSchedule}</Subtitle>

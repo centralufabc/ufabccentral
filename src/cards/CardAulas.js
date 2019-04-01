@@ -17,7 +17,7 @@ export default class CardAulas extends Component {
     index: 0,
     ra: 0,
     nextRA: '',
-    dialogVisible: true,
+    dialogVisible: false,
   }
 
   downloadClassRooms = async () => {
