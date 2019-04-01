@@ -26,8 +26,8 @@ export const nameOfDayOfTheWeek = (day) => {
     case 5:
       return 'Sexta';
     case 6:
-      return 'Sabado';
-    case 7:
+      return 'Sábado';
+    case 0:
       return 'Domingo';
     default:
       return '';
@@ -45,6 +45,10 @@ export const dateFormated = () => year().toString() + (month() >= 10 ? month() :
 export const hour = () => moment().hours();
 
 export const minutes = () => moment().minutes();
+
+const weekOfYear = () => moment().week();
+
+export const biweekly = () => weekOfYear() % 2 === 0 ? 'quinzenal II' : 'quinzenal I';
 
 export const pdfFilesLink = 'https://drive.google.com/drive/folders/1A2sBcwvxql6YPFPG_CoMnVxBVjgOYlHx?usp=sharing';
 
@@ -68,7 +72,7 @@ export const formatHour = (value) => {
 };
 
 export const linesAvaliable = () => {
-  if (dayOfTheWeek() === 7) {
+  if (dayOfTheWeek() === 0) {
     return [];
   }
   if (dayOfTheWeek() === 6) {

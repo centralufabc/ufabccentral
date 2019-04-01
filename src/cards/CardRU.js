@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, NetInfo, Alert, AsyncStorage } from 'react-native';
+import {
+  Title,
+  Subtitle,
+} from '@shoutem/ui';
+import axios from 'axios';
 import commonStyles from '../styles/commonStyles';
 import ElevatedView from 'react-native-elevated-view'
 import ChangeItem from './../components/ChangeItem';
 
 import { urlServer, dateFormated, dynamicSort, dayOfTheWeek, nameOfDayOfTheWeek } from '../common';
-
-import axios from 'axios';
-
-import {
-  Title,
-  Subtitle,
-} from '@shoutem/ui';
 
 export default class CardRU extends Component {
   state = {
@@ -103,15 +101,17 @@ export default class CardRU extends Component {
           <ChangeItem isLast={this.isLast()} isFirst={this.isFirst()} next={() => this.next()} last={() => this.last()} text={nameOfDayOfTheWeek(this.selectedDay())} style={{ marginBottom: 15 }} />
         </View>
         <Subtitle style={styles.nameItem}>Almoço</Subtitle>
-        <Subtitle style={styles.text}>{this.state.menus[this.state.index] ? this.formatText(this.state.menus[this.state.index].almoço) : ''}</Subtitle>
+        <Subtitle style={styles.text}>{this.state.menus[this.state.index] ? this.formatText(this.state.menus[this.state.index].almoço) : '-'}</Subtitle>
         <Subtitle style={styles.nameItem}>Jantar</Subtitle>
-        <Subtitle style={styles.text}>{this.state.menus[this.state.index] ? this.formatText(this.state.menus[this.state.index].jantar) : ''}</Subtitle>
+        <Subtitle style={styles.text}>{this.state.menus[this.state.index] ? this.formatText(this.state.menus[this.state.index].jantar) : '-'}</Subtitle>
+        <Subtitle style={styles.nameItem}>Vegetariano</Subtitle>
+        <Subtitle style={styles.text}>{this.state.menus[this.state.index] ? this.formatText(this.state.menus[this.state.index].vegetariano) : '-'}</Subtitle>
         <Subtitle style={styles.nameItem}>Guarnição</Subtitle>
-        <Subtitle style={styles.text}>{this.state.menus[this.state.index] ? this.formatText(this.state.menus[this.state.index].guarnição) : ''}</Subtitle>
+        <Subtitle style={styles.text}>{this.state.menus[this.state.index] ? this.formatText(this.state.menus[this.state.index].guarnição) : '-'}</Subtitle>
         <Subtitle style={styles.nameItem}>Saladas</Subtitle>
-        <Subtitle style={styles.text}>{this.state.menus[this.state.index] ? this.formatText(this.state.menus[this.state.index].saladas) : ''}</Subtitle>
+        <Subtitle style={styles.text}>{this.state.menus[this.state.index] ? this.formatText(this.state.menus[this.state.index].saladas) : '-'}</Subtitle>
         <Subtitle style={styles.nameItem}>Sobremesas</Subtitle>
-        <Subtitle style={styles.text}>{this.state.menus[this.state.index] ? this.formatText(this.state.menus[this.state.index].sobremesas) : ''}</Subtitle>
+        <Subtitle style={styles.text}>{this.state.menus[this.state.index] ? this.formatText(this.state.menus[this.state.index].sobremesas) : '-'}</Subtitle>
       </ElevatedView>
     );
   }

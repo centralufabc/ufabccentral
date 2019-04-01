@@ -45,19 +45,17 @@ export default class CardBus extends Component {
         return value;
       }
     });
-    this.setState({ stationsDestiny: destinys });
+    this.setState({ stationsDestiny: destinys, destiny: destinys[0].value });
   };
 
-  updateOrigin = (stationSelected) => {
-    this.setState({ origin: stationSelected });
-    AsyncStorage.setItem('origin', stationSelected);
-    this.filterStations(stationSelected);
+  updateOrigin = () => {
+    AsyncStorage.setItem('origin', this.state.origin);
+    this.filterStations(this.state.origin);
     this.identifyKeys();
   }
 
-  updateDestiny = (stationSelected) => {
-    this.setState({ destiny: stationSelected });
-    AsyncStorage.setItem('destiny', stationSelected);
+  updateDestiny = () => {
+    AsyncStorage.setItem('destiny', this.state.destiny);
     this.identifyKeys();
   }
 
@@ -82,12 +80,12 @@ export default class CardBus extends Component {
     });
     await AsyncStorage.getItem('origin', (error, result) => {
       if (result) {
-        this.updateOrigin(result);
+        this.setState({ origin: result }, this.updateOrigin);
       }
     });
     await AsyncStorage.getItem('destiny', (error, result) => {
       if (result) {
-        this.updateDestiny(result);
+        this.setState({ destiny: result }, this.updateDestiny);
       }
     });
   }
@@ -218,8 +216,8 @@ export default class CardBus extends Component {
   reverseStations = () => {
     const oldOrigin = this.state.origin;
     const oldDestiny = this.state.destiny;
-    this.updateOrigin(oldDestiny);
-    this.updateDestiny(oldOrigin);
+    this.setState({ origin: oldDestiny }, this.updateOrigin);
+    this.setState({ destiny: oldOrigin }, this.updateDestiny);
   }
 
   searchLastSchedule = () => {
@@ -328,7 +326,7 @@ export default class CardBus extends Component {
           <Title style={styles.title}>Fretado</Title>
         </View>
         <View style={{ marginLeft: 16, marginRight: 16 }}>
-          <DropDownStations stations={this.state.stations} itemCount={5} onChange={(station) => this.updateOrigin(station)} origin value={this.state.origin} />
+          <DropDownStations stations={this.state.stations} itemCount={5} onChange={(station) => this.setState({ origin: station }, this.updateOrigin)} origin value={this.state.origin} />
         </View>
         <TouchableOpacity onPress={() => this.reverseStations()}>
           <View style={styles.originDestinyGroup}>
@@ -336,7 +334,7 @@ export default class CardBus extends Component {
           </View>
         </TouchableOpacity>
         <View style={{ marginLeft: 16, marginRight: 16 }}>
-          <DropDownStations stations={this.state.stationsDestiny} onChange={(station) => this.updateDestiny(station)} origin={false} value={this.state.destiny} />
+          <DropDownStations stations={this.state.stationsDestiny} onChange={(station) => this.setState({ destiny: station }, this.updateDestiny)} origin={false} value={this.state.destiny} />
         </View>
         <View style={styles.centralizeItems}>
           <Subtitle>{this.state.lastSchedule}</Subtitle>
