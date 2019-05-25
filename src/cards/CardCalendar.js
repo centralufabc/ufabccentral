@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, NetInfo, Alert, AsyncStorage } from 'react-native';
+import { StyleSheet, View, NetInfo, Alert, AsyncStorage, FlatList, Text } from 'react-native';
 import {
+  Heading,
   Title,
-  Subtitle,
 } from '@shoutem/ui';
 import axios from 'axios';
 import commonStyles from '../styles/commonStyles';
@@ -69,9 +69,28 @@ export default class CardRU extends Component {
         <View style={{ width: '100%', alignItems: 'center' }}>
           <Title style={styles.title}>Calendário</Title>
           <Title style={styles.title}>{this.state.filteredDates.length}</Title>
-          <ElevatedView
-            elevation={10}
+          <ElevatedView elevation={10} style={styles.dateCard}>
+            <Text style={{ fontSize: 40, height: '100%', textAlign: 'center', flex: 12 }}>
+              10
+            </Text>
+            <View style={{ marginTop: 5, marginBottom: 5, height: '80%', backgroundColor: commonStyles.colors.black, flex: 1 }} />
+            <Title style={{ color: commonStyles.colors.principal, flex: 50, backgroundColor: commonStyles.colors.black, textAlign: 'center', alignItems: 'center', textAlignVertical: 'center' }}>
+              oi 2
+            </Title>
+          </ElevatedView>
+          <FlatList
             style={styles.dateCalendar}
+            data={[
+              {key: 'Devin'},
+              {key: 'Jackson'},
+              {key: 'James'},
+              {key: 'Joel'},
+              {key: 'John'},
+              {key: 'Jillian'},
+              {key: 'Jimmy'},
+              {key: 'Julie'},
+            ]}
+            renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
           />
         </View>
       </ElevatedView>
@@ -90,8 +109,16 @@ const styles = StyleSheet.create({
     color: commonStyles.colors.principal,
   },
   dateCalendar: {
-    width: '90%',
-    height: '90%',
+    width: '100%',
+    height: '50%',
     backgroundColor: commonStyles.colors.principal,
+  },
+  dateCard: {
+    flexDirection: 'row',
+    width: '100%',
+    height: 60,
+    backgroundColor: commonStyles.colors.white,
+    marginTop: 3,
+    marginBottom: 3,
   },
 });

@@ -26,8 +26,8 @@ import { urlServer, linesAvaliable, hour, minutes, formatHour, pdfFilesLink, dyn
 
 export default class CardBus extends Component {
   state = { //eslint-disable-line
-    stations: [{ value: 'Santo André', origins: ['Terminal leste', 'São Bernardo', 'Terminal SBC'] }, { value: 'Terminal leste', origins: ['Santo André', 'São Bernardo', 'Terminal SBC'] }, { value: 'São Bernardo', origins: ['Santo André', 'Terminal leste', 'Praça dos expedicionários', 'Terminal SBC'] }, { value: 'Terminal SBC', origins: ['Santo André', 'Terminal leste', 'Praça dos expedicionários', 'São Bernardo'] }, { value: 'Praça dos expedicionários', origins: ['Terminal SBC', 'São Bernardo'] }],
-    stationsDestiny: [{ value: 'Terminal leste', origins: ['Santo André', 'São Bernardo', 'Terminal SBC'] }, { value: 'São Bernardo', origins: ['Santo André', 'Terminal leste', 'Praça dos expedicionários', 'Terminal SBC'] }, { value: 'Terminal SBC', origins: ['Santo André', 'Terminal leste', 'Praça dos expedicionários', 'São Bernardo'] }],
+    stations: [{ value: 'Santo André', origins: ['Terminal leste', 'São Bernardo'] }, { value: 'Terminal leste', origins: ['Santo André', 'São Bernardo'] }, { value: 'São Bernardo', origins: ['Santo André', 'Terminal leste', 'Terminal SBC'] }, { value: 'Terminal SBC', origins: ['São Bernardo'] }],
+    stationsDestiny: [{ value: 'Terminal leste', origins: ['Santo André', 'São Bernardo'] }, { value: 'São Bernardo', origins: ['Santo André', 'Terminal leste', 'Terminal SBC'] }, { value: 'Terminal SBC', origins: ['São Bernardo'] }],
     keyOrigin: '',
     keyDestiny: '',
     lastSchedule: '',
@@ -116,9 +116,6 @@ export default class CardBus extends Component {
         case 'São Bernardo':
           this.setState({ keyOrigin: 'SALeste', keyDestiny: 'SBC' }, this.searchSchedules);
           break;
-        case 'Terminal SBC':
-          this.setState({ keyOrigin: 'SALeste', keyDestiny: 'TermPraca' }, this.searchSchedules);
-          break;
         default:
           this.searchSchedules();
       }
@@ -129,9 +126,6 @@ export default class CardBus extends Component {
           break;
         case 'São Bernardo':
           this.setState({ keyOrigin: 'LesteSBC', keyDestiny: 'SBC' }, this.searchSchedules);
-          break;
-        case 'Terminal SBC':
-          this.setState({ keyOrigin: 'LesteSBC', keyDestiny: 'TermPraca' }, this.searchSchedules);
           break;
         default:
           this.searchSchedules();
@@ -145,46 +139,22 @@ export default class CardBus extends Component {
           this.setState({ keyOrigin: 'SBCLeste', keyDestiny: 'LesteSA' }, this.searchSchedules);
           break;
         case 'Terminal SBC':
-          this.setState({ keyOrigin: 'SBCPraca', keyDestiny: 'TermPraca' }, this.searchSchedules);
-          break;
-        case 'Praça dos expedicionários':
-          this.setState({ keyDestiny: 'PracaSBC', keyOrigin: 'SBCPraca' }, this.searchSchedules);
+          this.setState({ keyOrigin: 'SBCTerm', keyDestiny: 'TermSBC' }, this.searchSchedules);
           break;
         default:
           this.searchSchedules();
       }
-      } else if (this.state.origin === 'Terminal SBC') {
-              switch(this.state.destiny) {
-                case 'Santo André': 
-                  this.setState({ keyOrigin: 'TermPraca', keyDestiny: 'SA' }, this.searchSchedules);
-                  break;
-                case 'Terminal leste':
-                  this.setState({ keyOrigin: 'TermPraca', keyDestiny: 'LesteSA' }, this.searchSchedules);
-                  break;
-                case 'São Bernardo':
-                  this.setState({ keyOrigin: 'TermPraca', keyDestiny: 'SBC' }, this.searchSchedules);
-                  break;
-                case 'Praça dos expedicionários':
-                  this.setState({ keyOrigin: 'TermPraca', keyDestiny: 'PracaSBC' }, this.searchSchedules);
-                  break;
-                default:
-                  this.searchSchedules();
-              }
-            } else if (this.state.origin === 'Praça dos expedicionários') {
-              this.setState({ keyOrigin: 'PracaTerm' });
-              switch(this.state.destiny) {
-                case 'São Bernardo':
-                  this.setState({ keyOrigin: 'PracaSBC', keyDestiny: 'SBC' }, this.searchSchedules);
-                  break;
-                case 'Terminal SBC':
-                  this.setState({ keyOrigin: 'PracaTerm', keyDestiny: 'TermPraca' }, this.searchSchedules);
-                  break;
-                default:
-                  this.searchSchedules();
-              }
-            } else {
-              this.searchSchedules();
-            }
+    } else if (this.state.origin === 'Terminal SBC') {
+      switch (this.state.destiny) {
+        case 'São Bernardo':
+          this.setState({ keyOrigin: 'TermSBC', keyDestiny: 'SBC' }, this.searchSchedules);
+          break;
+        default:
+          this.searchSchedules();
+      }
+    } else {
+      this.searchSchedules();
+    }
   }
 
   searchSchedules = () => {
@@ -193,7 +163,7 @@ export default class CardBus extends Component {
       if (formatHour(value[this.state.keyOrigin]) >= time
          && formatHour(value[this.state.keyOrigin]) <= (time + 60)
          && linesAvaliable().includes(value['Linha'])
-         && value[this.state.keyDestiny]
+         && value[this.state.keyDestiny] !== 0
          && time > 60) {
         return value;
       }
@@ -201,8 +171,8 @@ export default class CardBus extends Component {
     resultSearch.sort(dynamicSort(this.state.keyOrigin));
     if (!this.isEquivalent(resultSearch, this.state.nextSchedules)) {
       this.setState({ nextSchedules: resultSearch, index: 0 });
-      this.searchLastSchedule();
     }
+    this.searchLastSchedule();
   };
 
   isEquivalent = (a, b) => {
@@ -247,15 +217,17 @@ export default class CardBus extends Component {
       if (formatHour(value[this.state.keyOrigin]) < time
          && formatHour(value[this.state.keyOrigin]) >= (time - 60)
          && linesAvaliable().includes(value['Linha'])
-         && value[this.state.keyDestiny]
+         && value[this.state.keyDestiny] !== 0
          && time > 60) {
         return value;
       }
     });
     if (resultSearch.length > 0) {
       resultSearch.sort(dynamicSort(this.state.keyOrigin));
-      const textLastSchedule = 'O último foi ' + this.nameLine(resultSearch[resultSearch.length - 1]) +  ' há ' + (time - formatHour(resultSearch[resultSearch.length - 1][this.state.keyOrigin])) + ' min';
+      const textLastSchedule = 'O último foi há ' + (time - formatHour(resultSearch[resultSearch.length - 1][this.state.keyOrigin])) + ' min';
       this.setState({ lastSchedule: textLastSchedule });
+    } else {
+      this.setState({ lastSchedule: 'O último foi há mais de uma hora' });
     }
   }
 
@@ -287,23 +259,6 @@ export default class CardBus extends Component {
       return 'Você vai chegar às ' + h + 'h' + m;
     }
     return 'Sem fretado na próxima hora';
-  }
-
-  nameLine = (next) => {
-    if (next) {
-      const numberLine = parseInt(next['Linha']);
-      if (numberLine <= 6) {
-        if (numberLine === 6) {
-          return 'Expresso';
-        }
-        return 'Linha ' + numberLine;
-      }
-      if (next['SBCLeste'] !== 0) {
-        return 'Linha 2';
-      }
-      return 'Linha 1';
-    } 
-    return '';
   }
 
   isLast = () => this.state.nextSchedules.length !== 0 ?
@@ -359,7 +314,6 @@ export default class CardBus extends Component {
         <View style={styles.centralizeItems}>
           <Subtitle>{this.state.lastSchedule}</Subtitle>
           <Heading style={{ color: commonStyles.colors.principal }}>{this.timeForNext()}</Heading>
-          <Subtitle>{this.nameLine(this.state.nextSchedules[this.state.index])}</Subtitle>
           <Subtitle style={{ color: commonStyles.colors.blueInfos }}>{this.arrivalTime()}</Subtitle>
           <ChangeItem isLast={this.isLast()} isFirst={this.isFirst()} next={() => this.next()} last={() => this.last()} text={'Outros horários'} />
           <TouchableOpacity onPress={() => this.openPDFFiles()}>

@@ -1,3 +1,34 @@
 {
-    "extends": "eslint-config-quintoandar-pwa"
+    "extends": "eslint-config-quintoandar-pwa",
+    "rules": {
+        "prefer-arrow-callback": 0,
+        "func-names": 0,
+        "internal/go-back-needs-fallback": 2,
+        "quintoandar/no-dynamic-import-index": 2,
+        "quintoandar/no-target-blank": 2,
+        "quintoandar/no-typo-components": 2,
+        "quintoandar/no-rgba-colors": 2,
+        "import/extensions": [
+          2,
+          {
+            "js": "never",
+            "ts": "never",
+            "tsx": "never"
+          }
+        ],
+        "max-lines": [
+          "error",
+          {
+            "max": 300,
+            "skipComments": true
+          }
+        ]
+      },
+      "settings": {
+        "import/resolver": {
+          "webpack": {
+            "config": "./internals/webpack/webpack.ssr.babel.js"
+          }
+        }
+      }
 }
