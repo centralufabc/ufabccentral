@@ -8,7 +8,7 @@ import commonStyles from '../styles/commonStyles';
 import ChangeItem from './../components/ChangeItem';
 
 
-import { urlServer, nameOfDayOfTheWeek, biweekly, dayOfTheWeek, dynamicSort } from '../common';
+import { urlServer, biweekly, dynamicSort } from '../common';
 
 export default class CardAulas extends Component {
   state = {

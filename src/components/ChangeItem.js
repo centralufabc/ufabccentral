@@ -4,7 +4,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Icon, Subtitle } from '@shoutem/ui';
-import commonStyles from '../styles/commonStyles';
 
 export default props => {
   return (

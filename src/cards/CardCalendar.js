@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, NetInfo, Alert, AsyncStorage, FlatList, Text } from 'react-native';
+import ElevatedView from 'react-native-elevated-view';
 import {
-  Heading,
   Title,
 } from '@shoutem/ui';
 import axios from 'axios';
 import commonStyles from '../styles/commonStyles';
-import ElevatedView from 'react-native-elevated-view';
 import ChangeItem from './../components/ChangeItem';
 
-import { urlServer, dateFormated, dynamicSort, dayOfTheWeek, nameOfDayOfTheWeek, day, month, year } from '../common';
+import { urlServer, shortMonthName, day, month, year } from '../common';
 
 export default class CardRU extends Component {
   state = {
     dates: [],
     filteredDates: [],
     index: 0,
+    typesCalendar: [{ tag: 'all', text: 'Geral'}, { tag: 'festas', text: 'Festas'}, { tag: 'aulas', text: 'Aulas'}],
   }
 
   downloadDates = async () => {
@@ -33,10 +33,13 @@ export default class CardRU extends Component {
       if (result) {
         const dates = JSON.parse(result);
         const filteredDates = dates.filter((value) => {
-          if (this.mountDate(value.ano, value.mes, value.dia) >= this.mountDate(year(), month(), day())) {
+          if (this.mountDate(value.ano, value.mes, value.dia) >= this.mountDate(year(), month(), day())
+              && (this.state.typesCalendar[this.state.index].tag === 'all' 
+                  || this.state.typesCalendar[this.state.index].tag === value.tipo)) {
             return value;
           }
         });
+        filteredDates.sort(this.sortDates());
         this.setState({ dates, filteredDates });
       } else {
         this.downloadDates();
@@ -46,9 +49,35 @@ export default class CardRU extends Component {
 
   mountDate = (newYear, newMonth, newDay) => {
     newMonth = newMonth < 10 ? '0' + newMonth.toString() : newMonth.toString();
-    newDay = newMonth < 10 ? '0' + newDay.toString() : newDay.toString();
+    newDay = newDay < 10 ? '0' + newDay.toString() : newDay.toString();
     const formatedText = newYear.toString() + newMonth.toString() + newDay.toString();
     return parseInt(formatedText);
+  }
+
+  sortDates = () => {
+    const sortOrder = 1;
+    return (a, b) => {
+      const result = this.mountDate(a.ano, a.mes, a.dia) < this.mountDate(b.ano, b.mes, b.dia) ? -1 : this.mountDate(a.ano, a.mes, a.dia) > this.mountDate(b.ano, b.mes, b.dia) ? 1 : 0;
+      return result * sortOrder;
+    };
+  };
+
+  next = () => {
+    if (this.state.index <= 1) {
+      const newIndex = this.state.index + 1;
+      this.setState({ index: newIndex }, this.loadDates);
+    } else {
+      this.setState({ index: 0 }, this.loadDates);
+    }
+  }
+
+  last = () => {
+    if (this.state.index >= 1) {
+      const nexIndex = this.state.index - 1;
+      this.setState({ index: nexIndex }, this.loadDates);
+    } else {
+      this.setState({ index: 2 }, this.loadDates);
+    }
   }
 
   componentDidMount () {
@@ -60,6 +89,24 @@ export default class CardRU extends Component {
     this.loadDates();
   }
 
+  itemDate = (dayDate, monthDate, nameDate) =>
+    <ElevatedView elevation={10} style={styles.dateCard}>
+      <View style={{ flex: 12, height: '100%', justifyContent: 'center' }}>
+        <Text style={{ fontSize: 36, textAlign: 'center', flex: 7, justifyContent: 'center', color: commonStyles.colors.black }}>
+          {dayDate}
+        </Text>
+        <Text style={{ flex: 3, fontSize: 12, height: '100%', textAlign: 'center', color: commonStyles.colors.principal }}>
+          {shortMonthName(monthDate)}
+        </Text>
+      </View>
+      <View style={{ marginTop: 5, marginBottom: 5, height: '80%', backgroundColor: commonStyles.colors.black, flex: 1 }} />
+      <View style={{ flex: 50, height: '100%', justifyContent: 'center' }}>
+        <Text style={{ color: commonStyles.colors.principal, textAlign: 'center', fontSize: 16 }}>
+          {nameDate}
+        </Text>
+      </View>
+    </ElevatedView>
+
   render() {
     return (
       <ElevatedView
@@ -68,29 +115,11 @@ export default class CardRU extends Component {
       >
         <View style={{ width: '100%', alignItems: 'center' }}>
           <Title style={styles.title}>Calendário</Title>
-          <Title style={styles.title}>{this.state.filteredDates.length}</Title>
-          <ElevatedView elevation={10} style={styles.dateCard}>
-            <Text style={{ fontSize: 40, height: '100%', textAlign: 'center', flex: 12 }}>
-              10
-            </Text>
-            <View style={{ marginTop: 5, marginBottom: 5, height: '80%', backgroundColor: commonStyles.colors.black, flex: 1 }} />
-            <Title style={{ color: commonStyles.colors.principal, flex: 50, backgroundColor: commonStyles.colors.black, textAlign: 'center', alignItems: 'center', textAlignVertical: 'center' }}>
-              oi 2
-            </Title>
-          </ElevatedView>
+          <ChangeItem style={{ height: '11%' }} text={this.state.typesCalendar[this.state.index].text} next={() => this.next()} last={() => this.last()} />
           <FlatList
             style={styles.dateCalendar}
-            data={[
-              {key: 'Devin'},
-              {key: 'Jackson'},
-              {key: 'James'},
-              {key: 'Joel'},
-              {key: 'John'},
-              {key: 'Jillian'},
-              {key: 'Jimmy'},
-              {key: 'Julie'},
-            ]}
-            renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
+            data={this.state.filteredDates}
+            renderItem={({ item }) => this.itemDate(item.dia, item.mes, item.nome)}
           />
         </View>
       </ElevatedView>
@@ -107,11 +136,11 @@ const styles = StyleSheet.create({
   title: {
     paddingTop: 5,
     color: commonStyles.colors.principal,
+    height: '8%',
   },
   dateCalendar: {
     width: '100%',
-    height: '50%',
-    backgroundColor: commonStyles.colors.principal,
+    height: '80%',
   },
   dateCard: {
     flexDirection: 'row',
