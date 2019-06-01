@@ -34,7 +34,7 @@ export default class CardRU extends Component {
         const dates = JSON.parse(result);
         const filteredDates = dates.filter((value) => {
           if (this.mountDate(value.ano, value.mes, value.dia) >= this.mountDate(year(), month(), day())
-              && (this.state.typesCalendar[this.state.index].tag === 'all' 
+              && (this.state.typesCalendar[this.state.index].tag === 'all'
                   || this.state.typesCalendar[this.state.index].tag === value.tipo)) {
             return value;
           }

@@ -101,8 +101,8 @@ android {
         applicationId "com.centralufabc.centralufabc"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 80
-        versionName "8.0"
+        versionCode 81
+        versionName "8.1"
     }
     signingConfigs {
         release {

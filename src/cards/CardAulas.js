@@ -8,7 +8,7 @@ import commonStyles from '../styles/commonStyles';
 import ChangeItem from './../components/ChangeItem';
 
 
-import { urlServer, biweekly, dynamicSort } from '../common';
+import { urlServer, biweekly, dynamicSort, dayOfTheWeek, nameOfDayOfTheWeek, hour } from '../common';
 
 export default class CardAulas extends Component {
   state = {
@@ -18,6 +18,7 @@ export default class CardAulas extends Component {
     ra: 0,
     nextRA: '',
     dialogVisible: false,
+    indexDay: 0,
   }
 
   loadRA = async () => {
@@ -47,8 +48,7 @@ export default class CardAulas extends Component {
     await AsyncStorage.getItem('aulas', (error, result) => {
       if (result) {
         const allClasses = this.separateClasses(JSON.parse(result));
-        //const day = nameOfDayOfTheWeek(dayOfTheWeek()).toLowerCase().replace('ç', 'c').replace('á', 'a');
-        const day = 'segunda';
+        const day = nameOfDayOfTheWeek(this.state.indexDay).toLowerCase().replace('ç', 'c').replace('á', 'a');
         const filteredClasses = allClasses.filter((value) => {
           if (value.dayOfClass.includes(day)
               && (value.frequency.includes(biweekly()) ||
@@ -57,7 +57,13 @@ export default class CardAulas extends Component {
           }
         });
         filteredClasses.sort(dynamicSort('startTime'));
-        this.setState({ classrooms: allClasses, classesToday: filteredClasses });
+        let classRomsOfDayIndex = 0;
+        for (let i=0; i < filteredClasses.length; i++) {
+          if ((hour() >= filteredClasses[i].endTime) && (filteredClasses.length > (i + 1))) {
+            classRomsOfDayIndex = 0;
+          }
+        }
+        this.setState({ classrooms: allClasses, classesToday: filteredClasses, index: classRomsOfDayIndex });
       }
     });
   }
@@ -138,6 +144,24 @@ export default class CardAulas extends Component {
     }
   }
 
+  isLastDay = () => this.state.indexDay === 6;
+
+  isFirstDay = () => this.state.indexDay === 0;
+
+  nextDay = () => {
+    if (this.state.indexDay < 6) {
+      const newIndex = this.state.indexDay + 1;
+      this.setState({ indexDay: newIndex }, this.loadClassRooms);
+    }
+  }
+
+  lastDay = () => {
+    if (this.state.indexDay > 0) {
+      const nexIndex = this.state.indexDay - 1;
+      this.setState({ indexDay: nexIndex }, this.loadClassRooms);
+    }
+  }
+
   changeRA = (value) => {
     if (value.length <= 12) {
       this.setState({ nextRA: value });
@@ -155,7 +179,8 @@ export default class CardAulas extends Component {
 
   componentDidMount() {
     this.loadRA();
-    this.loadClassRooms();
+    const dayOfThWeekWithoutSunday = dayOfTheWeek() === 0 ? 1 : dayOfTheWeek;
+    this.setState({ indexDay: dayOfThWeekWithoutSunday }, this.loadClassRooms);
   }
 
   render() {
@@ -166,6 +191,7 @@ export default class CardAulas extends Component {
       >
         <View style={{ alignItems: 'center' }}>
           <Title style={styles.title}>Aulas</Title>
+          <ChangeItem isLast={this.isLastDay()} isFirst={this.isFirstDay()} next={() => this.nextDay()} last={() => this.lastDay()} text={nameOfDayOfTheWeek(this.state.indexDay)} />
           <Subtitle style={styles.title}>{this.biweeklyText()}</Subtitle>
           <Subtitle style={styles.className}>{this.state.classesToday[this.state.index] ? this.state.classesToday[this.state.index].className : '-'}</Subtitle>
           <Subtitle style={styles.schedule}>{this.state.classesToday[this.state.index] ? this.formatTime() : '-'}</Subtitle>
