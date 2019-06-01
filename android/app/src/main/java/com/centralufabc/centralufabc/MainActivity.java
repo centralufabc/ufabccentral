@@ -1,4 +1,4 @@
-package com.ufabccentral;
+package com.centralufabc.centralufabc;
 
 import com.facebook.react.ReactActivity;
 

@@ -1,4 +1,4 @@
-package com.ufabccentral;
+package com.centralufabc.centralufabc;
 
 import android.app.Application;
 
