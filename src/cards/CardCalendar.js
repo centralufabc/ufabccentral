@@ -91,17 +91,17 @@ export default class CardRU extends Component {
 
   itemDate = (dayDate, monthDate, nameDate) =>
     <ElevatedView elevation={10} style={styles.dateCard}>
-      <View style={{ flex: 12, height: '100%', justifyContent: 'center' }}>
-        <Text style={{ fontSize: 36, textAlign: 'center', flex: 7, justifyContent: 'center', color: commonStyles.colors.black }}>
+      <View style={styles.viewCard}>
+        <Text style={{ fontSize: 36, textAlign: 'center', height: 45, justifyContent: 'center', color: commonStyles.colors.black }}>
           {dayDate}
         </Text>
-        <Text style={{ flex: 3, fontSize: 12, height: '100%', textAlign: 'center', color: commonStyles.colors.principal }}>
+        <Text style={{ fontSize: 12, textAlign: 'center', color: commonStyles.colors.principal }}>
           {shortMonthName(monthDate)}
         </Text>
       </View>
       <View style={{ marginTop: 5, marginBottom: 5, height: '80%', backgroundColor: commonStyles.colors.black, flex: 1 }} />
       <View style={{ flex: 50, height: '100%', justifyContent: 'center' }}>
-        <Text style={{ color: commonStyles.colors.principal, textAlign: 'center', fontSize: 16 }}>
+        <Text style={{ color: commonStyles.colors.principal, textAlign: 'center', fontSize: 16, padding: 5 }}>
           {nameDate}
         </Text>
       </View>
@@ -115,7 +115,12 @@ export default class CardRU extends Component {
       >
         <View style={{ width: '100%', alignItems: 'center' }}>
           <Title style={styles.title}>Calendário</Title>
-          <ChangeItem style={{ height: '11%' }} text={this.state.typesCalendar[this.state.index].text} next={() => this.next()} last={() => this.last()} />
+          <ChangeItem
+            style={{ height: '11%' }}
+            text={this.state.typesCalendar[this.state.index].text}
+            next={() => this.next()}
+            last={() => this.last()}
+          />
           <FlatList
             style={styles.dateCalendar}
             data={this.state.filteredDates}
@@ -145,9 +150,14 @@ const styles = StyleSheet.create({
   dateCard: {
     flexDirection: 'row',
     width: '100%',
-    height: 60,
+    height: 80,
     backgroundColor: commonStyles.colors.white,
     marginTop: 3,
     marginBottom: 3,
+  },
+  viewCard: {
+    flex: 12,
+    height: '100%',
+    justifyContent: 'center',
   },
 });
