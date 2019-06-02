@@ -315,7 +315,7 @@ export default class CardBus extends Component {
           <Subtitle>{this.state.lastSchedule}</Subtitle>
           <Heading style={{ color: commonStyles.colors.principal }}>{this.timeForNext()}</Heading>
           <Subtitle style={{ color: commonStyles.colors.blueInfos }}>{this.arrivalTime()}</Subtitle>
-          <ChangeItem isLast={this.isLast()} isFirst={this.isFirst()} next={() => this.next()} last={() => this.last()} text={'Outros horários'} />
+          {this.state.nextSchedules.length > 1 && <ChangeItem isLast={this.isLast()} isFirst={this.isFirst()} next={() => this.next()} last={() => this.last()} text={'Outros horários'} />}
           <TouchableOpacity onPress={() => this.openPDFFiles()}>
             <Subtitle style={styles.moreAboutBus}>Ver tabelas em PDF</Subtitle>
           </TouchableOpacity>

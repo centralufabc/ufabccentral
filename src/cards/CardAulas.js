@@ -4,6 +4,7 @@ import Dialog, { SlideAnimation, DialogContent, DialogButton, DialogFooter } fro
 import { Title, Subtitle, TextInput } from '@shoutem/ui';
 import axios from 'axios';
 import ElevatedView from 'react-native-elevated-view';
+import IconMaterial from 'react-native-vector-icons/MaterialIcons';
 import commonStyles from '../styles/commonStyles';
 import ChangeItem from './../components/ChangeItem';
 
@@ -19,6 +20,7 @@ export default class CardAulas extends Component {
     nextRA: '',
     dialogVisible: false,
     indexDay: 0,
+    biweekly: 'quinzenal I',
   }
 
   loadRA = async () => {
@@ -49,10 +51,17 @@ export default class CardAulas extends Component {
       if (result) {
         const allClasses = this.separateClasses(JSON.parse(result));
         const day = nameOfDayOfTheWeek(this.state.indexDay).toLowerCase().replace('ç', 'c').replace('á', 'a');
+
         const filteredClasses = allClasses.filter((value) => {
           if (value.dayOfClass.includes(day)
-              && (value.frequency.includes(biweekly()) ||
+              && (value.frequency.includes(this.state.biweekly) ||
                   value.frequency.includes('semanal'))) {
+            if (this.state.biweekly === 'quinzenal I') {
+              if (!value.frequency.includes('II')) {
+                return value;
+              }
+              return false;
+            }
             return value;
           }
         });
@@ -124,20 +133,20 @@ export default class CardAulas extends Component {
     return initTime + 'h às ' + endTime + 'h';
   }
 
-  isLast = () => this.state.classesToday.length !== 0 ?
+  isLastClass = () => this.state.classesToday.length !== 0 ?
   this.state.index === (this.state.classesToday.length - 1) :
   true;
 
-  isFirst = () => this.state.index === 0;
+  isFirstClass = () => this.state.index === 0;
 
-  next = () => {
+  nextClass = () => {
     if (this.state.index < (this.state.classesToday.length - 1)) {
       const newIndex = this.state.index + 1;
       this.setState({ index: newIndex });
     }
   }
 
-  last = () => {
+  lastClass = () => {
     if (this.state.index > 0) {
       const nexIndex = this.state.index - 1;
       this.setState({ index: nexIndex });
@@ -168,19 +177,22 @@ export default class CardAulas extends Component {
     }
   }
 
+  changeBiweekly = () => {
+    const newBiweekly = this.state.biweekly === 'quinzenal I' ? 'quinzenal II' : 'quinzenal I';
+    this.setState({ biweekly: newBiweekly }, this.loadClassRooms);
+  }
+
   saveRA = () => {
     AsyncStorage.setItem('ra', this.state.nextRA.toString());
     this.setState({ ra: this.state.nextRA, dialogVisible: false }, this.downloadClassRooms);
   }
 
-  biweeklyText = () => {
-    return biweekly().substring(0, 1).toUpperCase() + biweekly().substring(1);
-  }
+  biweeklyText = () => this.state.biweekly.substring(0, 1).toUpperCase() + this.state.biweekly.substring(1);
 
   componentDidMount() {
     this.loadRA();
-    const dayOfThWeekWithoutSunday = dayOfTheWeek() === 0 ? 1 : dayOfTheWeek;
-    this.setState({ indexDay: dayOfThWeekWithoutSunday }, this.loadClassRooms);
+    const dayOfThWeekWithoutSunday = dayOfTheWeek() === 0 ? 1 : dayOfTheWeek();
+    this.setState({ indexDay: dayOfThWeekWithoutSunday, biweekly: biweekly() }, this.loadClassRooms);
   }
 
   render() {
@@ -191,13 +203,20 @@ export default class CardAulas extends Component {
       >
         <View style={{ alignItems: 'center' }}>
           <Title style={styles.title}>Aulas</Title>
-          <ChangeItem isLast={this.isLastDay()} isFirst={this.isFirstDay()} next={() => this.nextDay()} last={() => this.lastDay()} text={nameOfDayOfTheWeek(this.state.indexDay)} />
-          <Subtitle style={styles.title}>{this.biweeklyText()}</Subtitle>
+          <View style={{ flexDirection: 'row', width: '90%', justifyContent: 'space-between', marginBottom: 8 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+              <TouchableOpacity onPress={this.changeBiweekly}>
+                <IconMaterial name={'autorenew'} style={{ marginRight: 5 }} size={25} color={commonStyles.colors.black} />
+              </TouchableOpacity>
+              <Subtitle>{this.biweeklyText()}</Subtitle>
+            </View>
+            <ChangeItem isLast={this.isLastDay()} isFirst={this.isFirstDay()} next={() => this.nextDay()} last={() => this.lastDay()} text={nameOfDayOfTheWeek(this.state.indexDay)} />
+          </View>
+          {this.state.classesToday.length > 1 && <ChangeItem isLast={this.isLastClass()} isFirst={this.isFirstClass()} next={() => this.nextClass()} last={() => this.lastClass()} text={'Outras aulas'} />}
           <Subtitle style={styles.className}>{this.state.classesToday[this.state.index] ? this.state.classesToday[this.state.index].className : '-'}</Subtitle>
           <Subtitle style={styles.schedule}>{this.state.classesToday[this.state.index] ? this.formatTime() : '-'}</Subtitle>
           <Subtitle style={styles.teacherName}>{this.state.classesToday[this.state.index] ? this.state.classesToday[this.state.index].teacherName : '-'}</Subtitle>
           <Subtitle style={styles.schedule}>{this.state.classesToday[this.state.index] ? this.state.classesToday[this.state.index].room : '-'}</Subtitle>
-          <ChangeItem isLast={this.isLast()} isFirst={this.isFirst()} next={() => this.next()} last={() => this.last()} text={'Outras aulas'} />
           <TouchableOpacity onPress={() => this.setState({ dialogVisible: true })}>
             <Subtitle style={styles.addRA}>{this.state.ra === 0 ? 'Toque aqui para adicionar seu RA\n' : 'Aulas do RA: ' + this.state.ra + '\nToque aqui para editar'}</Subtitle>
           </TouchableOpacity>

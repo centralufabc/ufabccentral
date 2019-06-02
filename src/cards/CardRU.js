@@ -120,6 +120,7 @@ export default class CardRU extends Component {
 const styles = StyleSheet.create({
   stayElevated: {
     height: '90%',
+    overflow: 'scroll',
     width: '100%',
     backgroundColor: 'white',
   },
