@@ -125,12 +125,14 @@ export default class CardAulas extends Component {
   }
 
   formatTime = () => {
-    const initTime = this.state.classesToday[this.state.index].startTime ?
+    let initTime = this.state.classesToday[this.state.index].startTime ?
     this.state.classesToday[this.state.index].startTime.toString().substring(0, 2) :
     '';
+    initTime = initTime === '80' ? '8' : initTime;
     const endTime = this.state.classesToday[this.state.index].endTime ?
     this.state.classesToday[this.state.index].endTime.toString().substring(0, 2) :
     '';
+
     return initTime + 'h às ' + endTime + 'h';
   }
 
