@@ -8,6 +8,7 @@ import CardBus from './src/cards/CardBus';
 import CardAulas from './src/cards/CardAulas';
 import CardRU from './src/cards/CardRU';
 import CardCalendar from './src/cards/CardCalendar';
+import CardDevs from './src/cards/CardDevs';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -20,6 +21,7 @@ export const sliderWidth = viewportWidth;
 export const itemWidth = slideWidth;
 
 const cards = [
+  <CardDevs />,
   <CardBus />,
   <CardAulas />,
   <CardRU />,
@@ -28,7 +30,7 @@ const cards = [
 
 export default class App extends Component {
   state = {
-    index: 1,
+    index: 2,
   }
   _renderItem = ({ index }) => cards[index];
 
@@ -63,7 +65,7 @@ export default class App extends Component {
           itemWidth={itemWidth}
           activeSlideAlignment={'center'}
           layout={'default'}
-          firstItem={1}
+          firstItem={2}
         />
         { this.pagination }
       </Screen>
