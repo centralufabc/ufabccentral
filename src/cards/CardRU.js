@@ -10,6 +10,7 @@ import ElevatedView from 'react-native-elevated-view'
 import ChangeItem from './../components/ChangeItem';
 
 import { urlServer, dateFormated, dynamicSort, dayOfTheWeek, nameOfDayOfTheWeek } from '../common';
+import { amplitude } from '../../App';
 
 export default class CardRU extends Component {
   state = {
@@ -73,6 +74,7 @@ export default class CardRU extends Component {
   isFirst = () => this.state.index === 0;
 
   next = () => {
+    amplitude.logEvent('click_next_day_ru', { day: this.state.index });
     if (this.state.index < (this.state.menus.length - 1)) {
       const newIndex = this.state.index + 1;
       this.setState({ index: newIndex });
@@ -80,6 +82,7 @@ export default class CardRU extends Component {
   }
 
   last = () => {
+    amplitude.logEvent('click_previous_day_ru', { day: this.state.index });
     if (this.state.index > 0) {
       const nexIndex = this.state.index - 1;
       this.setState({ index: nexIndex });

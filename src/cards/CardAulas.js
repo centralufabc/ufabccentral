@@ -10,6 +10,7 @@ import ChangeItem from './../components/ChangeItem';
 
 
 import { urlServer, biweekly, dynamicSort, dayOfTheWeek, nameOfDayOfTheWeek, hour } from '../common';
+import { amplitude } from '../../App';
 
 export default class CardAulas extends Component {
   state = {
@@ -140,6 +141,7 @@ export default class CardAulas extends Component {
   isFirstClass = () => this.state.index === 0;
 
   nextClass = () => {
+    amplitude.logEvent('click_next_today_aulas');
     if (this.state.index < (this.state.classesToday.length - 1)) {
       const newIndex = this.state.index + 1;
       this.setState({ index: newIndex });
@@ -147,6 +149,7 @@ export default class CardAulas extends Component {
   }
 
   lastClass = () => {
+    amplitude.logEvent('click_next_previous_aulas');
     if (this.state.index > 0) {
       const nexIndex = this.state.index - 1;
       this.setState({ index: nexIndex });
@@ -158,6 +161,7 @@ export default class CardAulas extends Component {
   isFirstDay = () => this.state.indexDay === 0;
 
   nextDay = () => {
+    amplitude.logEvent('click_next_day_aulas', { day: this.state.indexDay });
     if (this.state.indexDay < 6) {
       const newIndex = this.state.indexDay + 1;
       this.setState({ indexDay: newIndex }, this.loadClassRooms);
@@ -165,6 +169,7 @@ export default class CardAulas extends Component {
   }
 
   lastDay = () => {
+    amplitude.logEvent('click_previous_day_aulas', { day: this.state.indexDay });
     if (this.state.indexDay > 0) {
       const nexIndex = this.state.indexDay - 1;
       this.setState({ indexDay: nexIndex }, this.loadClassRooms);
@@ -178,12 +183,14 @@ export default class CardAulas extends Component {
   }
 
   changeBiweekly = () => {
+    amplitude.logEvent('click_change_biweekly');
     const newBiweekly = this.state.biweekly === 'quinzenal I' ? 'quinzenal II' : 'quinzenal I';
     this.setState({ biweekly: newBiweekly }, this.loadClassRooms);
   }
 
   saveRA = () => {
     AsyncStorage.setItem('ra', this.state.nextRA.toString());
+    amplitude.logEvent('add_new_ra', { newRa: this.state.nextRA, oldRA: this.state.ra });
     this.setState({ ra: this.state.nextRA, dialogVisible: false }, this.downloadClassRooms);
   }
 

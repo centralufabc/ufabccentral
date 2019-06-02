@@ -6,21 +6,25 @@ import {
   Subtitle,
 } from '@shoutem/ui';
 import commonStyles from '../styles/commonStyles';
+import { amplitude } from '../../App';
 
 export default class CardDevs extends Component {
   openEnactus = () => {
+    amplitude.logEvent('click_enactus');
     Linking.canOpenURL('https://www.facebook.com/enactus.ufabc/').then(() => {
       Linking.openURL('https://www.facebook.com/enactus.ufabc/');
     });
   }
 
   openKleversonNascimento = () => {
+    amplitude.logEvent('click_kleverson_nascimento');
     Linking.canOpenURL('https://www.facebook.com/kleverson.nascimento.1').then(() => {
       Linking.openURL('https://www.facebook.com/kleverson.nascimento.1');
     });
   }
 
   openRodrigoMayer = () => {
+    amplitude.logEvent('click_rodrigo_mayer');
     Linking.canOpenURL('https://www.facebook.com/rodrigo98rm').then(() => {
       Linking.openURL('https://www.facebook.com/rodrigo98rm');
     });

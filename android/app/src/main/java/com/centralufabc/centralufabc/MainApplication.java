@@ -3,6 +3,7 @@ package com.centralufabc.centralufabc;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.sudoplz.reactnativeamplitudeanalytics.RNAmplitudeSDKPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.reactnative.photoview.PhotoViewPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -11,6 +12,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.sudoplz.reactnativeamplitudeanalytics.RNAmplitudeSDKPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNAmplitudeSDKPackage(MainApplication.this),
             new RNGestureHandlerPackage(),
             new PhotoViewPackage(),
             new LinearGradientPackage(),

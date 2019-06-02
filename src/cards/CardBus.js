@@ -20,6 +20,7 @@ import axios from 'axios';
 
 import DropDownStations from '../components/DropDownStations';
 import ChangeItem from '../components/ChangeItem';
+import { amplitude } from '../../App';
 
 import commonStyles from '../styles/commonStyles';
 import { urlServer, linesAvaliable, hour, minutes, formatHour, pdfFilesLink, dynamicSort } from '../common';
@@ -50,6 +51,7 @@ export default class CardBus extends Component {
   };
 
   updateOrigin = (stationSelected) => {
+    amplitude.logEvent('click_update_origin_station', { station: stationSelected });
     this.setState({ origin: stationSelected }, () => {
       AsyncStorage.setItem('origin', stationSelected);
       this.filterStations(stationSelected);
@@ -57,6 +59,7 @@ export default class CardBus extends Component {
   }
 
   updateDestiny = (stationSelected) => {
+    amplitude.logEvent('click_update_destiny_station', { station: stationSelected });
     this.setState({ destiny: stationSelected }, () => {
       AsyncStorage.setItem('destiny', stationSelected);
       this.identifyKeys();
@@ -102,6 +105,7 @@ export default class CardBus extends Component {
   }
 
   openPDFFiles = () => {
+    amplitude.logEvent('open_pdf_bus');
     Linking.canOpenURL(pdfFilesLink).then(() => {
       Linking.openURL(pdfFilesLink);
     });
@@ -195,6 +199,7 @@ export default class CardBus extends Component {
   }
 
   reverseStations = () => {
+    amplitude.logEvent('click_revert_stations', { stationOrigin: this.state.origin, stationDestiny: this.state.destiny });
     const oldOrigin = this.state.origin;
     const oldDestiny = this.state.destiny;
     this.setState({ origin: oldDestiny }, () => {
@@ -268,6 +273,7 @@ export default class CardBus extends Component {
   isFirst = () => this.state.index === 0;
 
   next = () => {
+    amplitude.logEvent('click_view_next_bus');
     if (this.state.index < (this.state.nextSchedules.length - 1)) {
       const newIndex = this.state.index + 1;
       this.setState({ index: newIndex });
@@ -275,6 +281,7 @@ export default class CardBus extends Component {
   }
 
   last = () => {
+    amplitude.logEvent('click_view_previous_bus');
     if (this.state.index > 0) {
       const nexIndex = this.state.index - 1;
       this.setState({ index: nexIndex });

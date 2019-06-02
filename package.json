@@ -16,6 +16,7 @@
     "react": "16.6.3",
     "react-moment": "^0.8.4",
     "react-native": "0.58.4",
+    "react-native-amplitude-analytics": "^0.2.6",
     "react-native-dropdown": "0.0.6",
     "react-native-elevated-view": "0.0.6",
     "react-native-gesture-handler": "^1.0.17",

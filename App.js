@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { Dimensions } from 'react-native';
 import { Screen } from '@shoutem/ui';
+import RNAmplitude from 'react-native-amplitude-analytics';
 import commonStyles from './src/styles/commonStyles';
 import NavigationBar from './src/components/NavigationBar';
 import CardBus from './src/cards/CardBus';
@@ -17,6 +18,7 @@ function wp(percentage) {
   return Math.round(value);
 }
 const slideWidth = wp(80);
+export const amplitude = new RNAmplitude('ad38650f9d155ae97eb6dd7846d01ded', true);
 export const sliderWidth = viewportWidth;
 export const itemWidth = slideWidth;
 
@@ -32,6 +34,7 @@ export default class App extends Component {
   state = {
     index: 2,
   }
+
   _renderItem = ({ index }) => cards[index];
 
   get pagination () {
@@ -52,6 +55,16 @@ export default class App extends Component {
     );
   }
 
+  componentWillMount() {
+    amplitude.logEvent('open_app');
+  }
+
+  changePage = (index) =>  {
+    const namePages = ['devs', 'bus', 'aulas', 'ru', 'calendar'];
+    amplitude.logEvent(`${namePages[index]}_page_viewed`);
+    this.setState({ index });
+  }
+
   render() {
     return (
       <Screen style={{ backgroundColor: commonStyles.colors.principal }}>
@@ -59,7 +72,7 @@ export default class App extends Component {
         <Carousel
           ref={(c) => { this._carousel = c; }}
           data={cards}
-          onSnapToItem={(index) => this.setState({ index })}
+          onSnapToItem={(index) => this.changePage(index)}
           renderItem={this._renderItem}
           sliderWidth={sliderWidth}
           itemWidth={itemWidth}
