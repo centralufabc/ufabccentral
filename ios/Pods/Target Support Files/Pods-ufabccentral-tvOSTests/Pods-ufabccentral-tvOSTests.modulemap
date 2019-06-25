@@ -1,0 +1,6 @@
+framework module Pods_ufabccentral_tvOSTests {
+  umbrella header "Pods-ufabccentral-tvOSTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
