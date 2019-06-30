@@ -20,6 +20,7 @@
     "react-native-dropdown": "0.0.6",
     "react-native-elevated-view": "0.0.6",
     "react-native-gesture-handler": "^1.3.0",
+    "react-native-intent-launcher": "^0.2.1",
     "react-native-material-dropdown": "^0.11.1",
     "react-native-popup-dialog": "^0.18.0",
     "react-native-snap-carousel": "^3.7.5",
