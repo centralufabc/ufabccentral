@@ -6341,6 +6341,11 @@ react-native-gesture-responder@0.1.1:
   dependencies:
     react-timer-mixin "^0.13.3"
 
+react-native-intent-launcher@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-intent-launcher/-/react-native-intent-launcher-0.2.1.tgz#1519e8b0b87285d579c44cd83831bbcd8c08830b"
+  integrity sha512-V1rzMQrMsvvLA8mJqw2lrHwMseeo8XEbzNI9c2YsR2oUTF2tzw4mHzV/mKuBxL2cJEksPekpA53vJeM8YtjwYA==
+
 react-native-lightbox@shoutem/react-native-lightbox#v0.7.2:
   version "0.7.2"
   resolved "https://codeload.github.com/shoutem/react-native-lightbox/tar.gz/91f3f58759e9901d9c006b01ce32d074606eda0e"
