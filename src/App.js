@@ -7,6 +7,7 @@ import {
 
 // Tabs
 import HomeScreen from './view/Home';
+import Informacoes from './view/Informacoes';
 // import MyTicketsScreen from './src/view/MyTickets';
 // import ProfileScreen from './src/view/Profile';
 // import SearchScreen from './src/view/Search';
@@ -28,6 +29,12 @@ const TabNavigator = createBottomTabNavigator({
     screen: HomeScreen,
     navigationOptions: () => ({
       title: 'Comunidade',
+    }),
+  },
+  OutrasInfos: {
+    screen: Informacoes,
+    navigationOptions: () => ({
+      title: 'Outras Informações',
     }),
   },
 });
