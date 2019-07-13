@@ -155,10 +155,16 @@ Para começar a trabalhar em novas funcionalidades, você só precisa:
 git checkout master
 ```
 
-- Atulizar o seu branch master com o repositório original:
+- Atualizar o seu branch master com o repositório original:
 
 ```
 git pull https://github.com/centralufabc/ufabccentral.git master
+```
+
+- Atualizar o seu branch master remoto:
+
+```
+git push
 ```
 
 Pronto! Agora basta voltar para o passo 5 (escolher outra funcionalidade, criar outro branch etc...)
