@@ -7,13 +7,17 @@ import {
 
 // Tabs
 import HomeScreen from './view/Home';
+import MenuScreen from './view/Menu';
+
+// Telas
+import Informacoes from './view/Informacoes';
 // import MyTicketsScreen from './src/view/MyTickets';
 // import ProfileScreen from './src/view/Profile';
 // import SearchScreen from './src/view/Search';
 
 const TabNavigator = createBottomTabNavigator({
   Menu: {
-    screen: HomeScreen,
+    screen: MenuScreen,
     navigationOptions: () => ({
       title: 'Menu',
     }),
@@ -30,6 +34,8 @@ const TabNavigator = createBottomTabNavigator({
       title: 'Comunidade',
     }),
   },
+}, {
+  initialRouteName: 'Home',
 });
 
 const AppNavigator = createStackNavigator(
@@ -42,9 +48,24 @@ const AppNavigator = createStackNavigator(
         headerBackTitle: null,
       }),
     },
+    Informacoes: {
+      screen: Informacoes,
+      navigationOptions: () => ({
+        title: 'Outras Informações',
+      }),
+    },
   },
   {
     initialRouteName: 'Tabs',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: '#0d593b',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: '600',
+      },
+    },
   }
 );
 
