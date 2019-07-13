@@ -8,7 +8,8 @@ import {
 // Tabs
 import HomeScreen from './view/Home';
 import MenuScreen from './view/Menu';
-//
+
+// Telas
 import Informacoes from './view/Informacoes';
 // import MyTicketsScreen from './src/view/MyTickets';
 // import ProfileScreen from './src/view/Profile';
@@ -56,6 +57,15 @@ const AppNavigator = createStackNavigator(
   },
   {
     initialRouteName: 'Tabs',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: '#0d593b',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: '600',
+      },
+    },
   }
 );
 

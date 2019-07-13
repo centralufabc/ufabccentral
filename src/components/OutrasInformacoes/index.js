@@ -40,6 +40,7 @@ const styles = {
     padding: 10,
   },
   textStyle: {
+    color: '#000',
     fontSize: 16,
     lineHeight: 25,
   },

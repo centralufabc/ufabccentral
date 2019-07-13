@@ -21,6 +21,6 @@ export default class MenuScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  buttonStyle: { padding: 8, backgroundColor: '#00D1B2', width: '50%', alignItems: 'center', borderRadius: 4 },
+  buttonStyle: { margin: 8, padding: 8, backgroundColor: '#0d593b', width: '50%', alignItems: 'center', borderRadius: 4 },
   buttonTextStyle: { fontWeight: '600', color: '#fff' },
 });
