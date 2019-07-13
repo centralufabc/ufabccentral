@@ -7,6 +7,8 @@ import {
 
 // Tabs
 import HomeScreen from './view/Home';
+import MenuScreen from './view/Menu';
+//
 import Informacoes from './view/Informacoes';
 // import MyTicketsScreen from './src/view/MyTickets';
 // import ProfileScreen from './src/view/Profile';
@@ -14,7 +16,7 @@ import Informacoes from './view/Informacoes';
 
 const TabNavigator = createBottomTabNavigator({
   Menu: {
-    screen: HomeScreen,
+    screen: MenuScreen,
     navigationOptions: () => ({
       title: 'Menu',
     }),
@@ -31,12 +33,8 @@ const TabNavigator = createBottomTabNavigator({
       title: 'Comunidade',
     }),
   },
-  OutrasInfos: {
-    screen: Informacoes,
-    navigationOptions: () => ({
-      title: 'Outras Informações',
-    }),
-  },
+}, {
+  initialRouteName: 'Home',
 });
 
 const AppNavigator = createStackNavigator(
@@ -47,6 +45,12 @@ const AppNavigator = createStackNavigator(
         title: 'Tabs',
         header: null,
         headerBackTitle: null,
+      }),
+    },
+    Informacoes: {
+      screen: Informacoes,
+      navigationOptions: () => ({
+        title: 'Outras Informações',
       }),
     },
   },
