@@ -1,5 +1,6 @@
 import React from 'react';
-import { Platform, Image, Linking, View, Text, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native';
+import { Platform, Image, Linking, View, Text, SafeAreaView, FlatList, Dimensions, TouchableOpacity, StyleSheet } from 'react-native';
+import Banner from '../components/Banner';
 import IntentLauncher from 'react-native-intent-launcher';
 
 export default class HomeScreen extends React.Component {
@@ -31,7 +32,15 @@ export default class HomeScreen extends React.Component {
 
   render() {
     return (
-      <SafeAreaView>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          paddingTop: Platform.OS === 'ios' ? 0 : 8,
+        }}
+      >
+        <Banner />
         {Platform.OS === 'android' && (
           <View style={styles.card}>
             <Text style={{ fontSize: 22, fontWeight: '600', marginTop: 12, color: '#000' }}>UFABC Library</Text>
@@ -52,6 +61,7 @@ export default class HomeScreen extends React.Component {
             </TouchableOpacity>
           </View>
         )}
+
       </SafeAreaView>
     );
   }
@@ -59,19 +69,20 @@ export default class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
   card: {
+    flexDirection: 'row',
+    width: Dimensions.get('window').width - 24,
+    height: 160,
     backgroundColor: '#fff',
-    height: 240,
-    margin: 8,
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 2,
+    elevation: 4,
+    marginHorizontal: 4,
+    marginVertical: 16,
     shadowColor: '#000',
-    shadowRadius: 3,
-    shadowOpacity: 0.2,
     shadowOffset: {
-      width: 3,
+      width: 2,
       height: 3,
     },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    borderRadius: 8,
   },
 });
