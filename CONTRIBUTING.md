@@ -20,7 +20,7 @@ Recomendo que siga a documentação oficial do RN para configurar seu ambiente (
   - JDK
   - React Native CLI
   - Android Studio
-  
+
 - Instale o [Yarn](https://yarnpkg.com/pt-BR/docs/install)
 
 ### 2. Fork
@@ -57,7 +57,11 @@ cd ufabccentral
 yarn install
 ```
 
-- Nice! Agora você está pronto para rodar o projeto!
+- Existe um problema com a versão do React Native que estamos usando.
+Para arrumá-lo siga os passos descritos [nesta issue](https://github.com/centralufabc/ufabccentral/issues/10#issue-472205955), em "Fix temporário".
+Este problema será arrumado quando um upgrade da versão do React Native for feito no projeto.
+
+- Nice! Agora você está pront@ para rodar o projeto!
 
 ### 4. Rodando o projeto
 
@@ -77,7 +81,7 @@ Agora que o ambiente já está configurado e o projeto está rodando, vamos ver 
 
 ### 5. Escolhendo uma funcionalidade
 
-Escolha uma funcionalidade da [lista](https://docs.google.com/document/d/1SKSl1pL0EYm1HPG2CUs3u2_tC4mQm4Q5DfuHcLs3usk/edit?usp=sharing) (ou faça uma sugestão) e crie uma Issue no repositório ORIGINAL, especificando qual é a funcionalidade. Você pode colocar suas ideias de como planeja implementá-la e nós vamos dar o máximo de detalhes sobre ela.
+Escolha uma funcionalidade da [lista](https://docs.google.com/document/d/1SKSl1pL0EYm1HPG2CUs3u2_tC4mQm4Q5DfuHcLs3usk/edit?usp=sharing) (ou faça uma sugestão) e crie uma Issue no repositório ORIGINAL, especificando qual é a funcionalidade. Você pode colocar suas ideias de como planeja implementá-la e nós vamos dar o máximo de detalhes sobre ela. Você pode acompanhar tudo que está acontecendo no projeto [neste board](https://github.com/orgs/centralufabc/projects/1?fullscreen=true).
 
 Para criar uma Issue, vá no repositório original e depois Issues -> New Issue
 
@@ -89,12 +93,41 @@ Neste exemplo vou criar um card na tab Home para direcionar para o app [UFABC Li
 
 ![](https://i.imgur.com/cfbsYjV.png)
 
-### 6. Desenvolvendo a funcionalidade
+### 6. Config inicial do Git
 
-Na pasta do seu projeto crie um novo branch com o nome da funcionalidade. Vou chamar esta de "link-app-biblioteca"
+🚨🚨🚨 Atenção: Isto precisa ser feito *uma única vez*  🚨🚨🚨
+
+Usamos o Gitflow workflow para lidar com as releases, features etc...
+
+Você pode ler mais sobre este workflow [aqui](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
+
+Essa ilustração resume o funcionamento do Gitflow:
+
+![](https://wac-cdn.atlassian.com/dam/jcr:61ccc620-5249-4338-be66-94d563f2843c/05%20(2).svg?cdnVersion=483)
+
+(Crédito da imagem: [tutorial](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) da Atlassian)
+
+Vamos configurar umas coisas:
+
+Na pasta do projeto rode:
 
 ```
-git checkout -b link-app-biblioteca
+git remote add upstream https://github.com/centralufabc/ufabccentral.git
+
+git fetch upstream
+
+git checkout -b develop upstream/develop
+```
+
+Pronto! Agora você está no branch `develop`, de desenvolvimento.
+Todos os branches de funcionalidade que você criar em seguida devem sair deste branch `develop`
+
+### 7. Desenvolvendo a funcionalidade
+
+Na pasta do seu projeto, estando no branch `develop`, crie um novo branch com o nome da funcionalidade. Vou chamar esta de "feature_link-app-biblioteca". Sempre coloque "feature_" na frente do nome da feature.
+
+```
+git checkout -b feature_link-app-biblioteca
 ```
 
 Agora basta codar sua funcionalidade!
@@ -115,7 +148,7 @@ Suba as mudanças deste novo branch para seu repositório no GitHub:
 ```
 //Apenas a primeira vez que for realizar o push deste novo branch
 //***Nao esqueca de substituir o nome do branch***
-git push --set-upstream origin link-app-biblioteca
+git push --set-upstream origin feature_link-app-biblioteca
 
 //Depois da primeira vez basta rodar
 git push
@@ -123,7 +156,7 @@ git push
 
 Depois de ter completado a funcionalidade e subido todas as alterações para seu branch, basta fazer o Pull Request.
 
-### 7. Pull Request
+### 8. Pull Request
 
 - Entre no seu repositório e clique em "New pull request"
 
@@ -149,19 +182,19 @@ Agora é só esperar que nós vamos avaliar seu código, enviar feedback se nece
 
 Para começar a trabalhar em novas funcionalidades, você só precisa:
 
-- Voltar para o branch master no seu repositório local:
+- Voltar para o branch develop no seu repositório local:
 
 ```
-git checkout master
+git checkout develop
 ```
 
-- Atualizar o seu branch master com o repositório original:
+- Atualizar o seu repositório com o repositório original:
 
 ```
-git pull https://github.com/centralufabc/ufabccentral.git master
+git fetch upstream
 ```
 
-- Atualizar o seu branch master remoto:
+- Atualizar o seu remote:
 
 ```
 git push
