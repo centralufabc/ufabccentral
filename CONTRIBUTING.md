@@ -192,6 +192,8 @@ git checkout develop
 
 ```
 git fetch upstream
+
+git pull
 ```
 
 - Atualizar o seu remote:
