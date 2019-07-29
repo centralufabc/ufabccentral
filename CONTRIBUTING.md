@@ -178,7 +178,7 @@ Pronto! O Pull Request foi enviado!
 
 Agora é só esperar que nós vamos avaliar seu código, enviar feedback se necessário e fazer um merge quando estiver tudo certinho!
 
-### 8. Continuando a contribuir
+### 9. Continuando a contribuir
 
 Para começar a trabalhar em novas funcionalidades, você só precisa:
 
@@ -194,6 +194,11 @@ git checkout develop
 git fetch upstream
 
 git pull
+```
+
+- Atualizar sua pasta node_modules:
+```
+yarn
 ```
 
 - Atualizar o seu remote:
