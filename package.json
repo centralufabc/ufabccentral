@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@shoutem/ui": "^0.23.18",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.23",
     "react": "16.6.3",
